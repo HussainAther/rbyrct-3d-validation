@@ -1,0 +1,39 @@
+{
+  "experiment": "04H",
+  "size": 16,
+  "angles": 12,
+  "tilts": [
+    -20.0,
+    0.0,
+    20.0
+  ],
+  "budgets": [
+    512,
+    1024,
+    2048,
+    4096
+  ],
+  "seeds": [
+    104729,
+    130363,
+    155921
+  ],
+  "phantoms": [
+    "original",
+    "shifted",
+    "multitarget",
+    "layers"
+  ],
+  "sirt_iterations": 400,
+  "candidate_pool": 64,
+  "ig_basis_side": 3,
+  "ig_batch": 16,
+  "limitations": [
+    "All synthetic development phantoms; no independent external validation",
+    "No measurement-adaptive acquisition, no photon noise, no dose claim",
+    "IG policy unchanged from 04G; greedy policy exploratory and geometry-only",
+    "Repeated seeds for deterministic policies are not independent replicates",
+    "Greedy selection overhead measured once and amortized over budgets and phantoms",
+    "Solver results use exact same sparse CPU system matrix as 04F"
+  ]
+}

@@ -1,0 +1,11 @@
+budget,noise_fraction,policy,n,mean_rmse
+64,0.0,adaptive_feedback,2,0.1798831935755135
+64,0.0,feedback_off_control,2,0.1755256061050273
+64,0.0,geometry_balanced,2,0.19634775254948172
+64,0.0,random,2,0.1948644685915787
+64,0.0,voxel_coverage_greedy,2,0.16875141985403747
+128,0.0,adaptive_feedback,2,0.12058789630480155
+128,0.0,feedback_off_control,2,0.1340112092260412
+128,0.0,geometry_balanced,2,0.15254481813869858
+128,0.0,random,2,0.15148599892345807
+128,0.0,voxel_coverage_greedy,2,0.12388783242596828

@@ -1,0 +1,9 @@
+phantom,noise_fraction,seed,budget,comparator,common_positions,same_set_fraction,sequence_identical
+shell,0.0,104729,64,fixed_greedy,0,0.03125,False
+shell,0.0,104729,64,feedback_off,1,0.125,False
+shell,0.0,104729,128,fixed_greedy,1,0.20833333333333334,False
+shell,0.0,104729,128,feedback_off,3,0.17708333333333334,False
+cross,0.0,104729,64,fixed_greedy,0,0.0625,False
+cross,0.0,104729,64,feedback_off,3,0.28125,False
+cross,0.0,104729,128,fixed_greedy,0,0.11458333333333333,False
+cross,0.0,104729,128,feedback_off,5,0.22916666666666666,False

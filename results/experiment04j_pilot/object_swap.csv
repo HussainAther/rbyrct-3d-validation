@@ -1,0 +1,5 @@
+seed,noise_fraction,budget,phantom_a,phantom_b,common_positions,same_set_fraction,sequence_identical
+104729,0.0,512,shell,cross,4,0.08333333333333333,False
+104729,0.0,1024,shell,cross,4,0.14508928571428573,False
+104729,0.01,512,shell,cross,5,0.08854166666666667,False
+104729,0.01,1024,shell,cross,5,0.13839285714285715,False

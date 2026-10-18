@@ -1,0 +1,17 @@
+phantom,noise_fraction,seed,budget,comparator,common_positions,same_set_fraction,sequence_identical
+shell,0.0,104729,512,fixed_greedy,1,0.10416666666666667,False
+shell,0.0,104729,512,feedback_off,4,0.125,False
+shell,0.0,104729,1024,fixed_greedy,1,0.14620535714285715,False
+shell,0.0,104729,1024,feedback_off,5,0.140625,False
+shell,0.01,104729,512,fixed_greedy,1,0.1015625,False
+shell,0.01,104729,512,feedback_off,3,0.09895833333333333,False
+shell,0.01,104729,1024,fixed_greedy,2,0.1328125,False
+shell,0.01,104729,1024,feedback_off,3,0.13727678571428573,False
+cross,0.0,104729,512,fixed_greedy,0,0.12239583333333333,False
+cross,0.0,104729,512,feedback_off,3,0.09375,False
+cross,0.0,104729,1024,fixed_greedy,1,0.15290178571428573,False
+cross,0.0,104729,1024,feedback_off,3,0.13839285714285715,False
+cross,0.01,104729,512,fixed_greedy,0,0.1171875,False
+cross,0.01,104729,512,feedback_off,3,0.09375,False
+cross,0.01,104729,1024,fixed_greedy,0,0.14620535714285715,False
+cross,0.01,104729,1024,feedback_off,3,0.13169642857142858,False

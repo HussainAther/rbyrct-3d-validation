@@ -1,0 +1,14 @@
+{
+  "size": 16,
+  "angles_per_tilt": 12,
+  "tilts_deg": [
+    -20.0,
+    0.0,
+    20.0
+  ],
+  "n_rays": 9216,
+  "astra_version": "2.5.0",
+  "metric": "relative L2 norm of flattened ASTRA minus CPU line integrals",
+  "tolerance": 0.05,
+  "status": "match"
+}

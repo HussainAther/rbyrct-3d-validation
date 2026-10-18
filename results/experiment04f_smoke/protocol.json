@@ -1,0 +1,30 @@
+{
+  "experiment": "04F",
+  "volume_side": 8,
+  "angles_per_tilt": 4,
+  "tilts_degrees": [
+    -20.0,
+    0.0,
+    20.0
+  ],
+  "rays": 768,
+  "nonzeros": 7744,
+  "forward_model": "identical explicit CPU Siddon path-length matrix A, imported from 04B",
+  "measurements": "noiseless A @ same phantom, for both methods",
+  "initialization": "both solvers start at x=0.3 everywhere",
+  "mart_rule": "sequential multiplicative, exponent=lambda * a_ij/max(a_i)",
+  "mart_epochs": 2,
+  "mart_relaxation": 0.15,
+  "sirt_rule": "simultaneous row- and column-sum-normalized additive update; positivity clipping",
+  "sirt_iterations": 4,
+  "sirt_relaxation": 1.0,
+  "adjoint_error": 1.2742227662392815e-14,
+  "matrix_build_seconds_excluded_from_solver_times": 0.1923781000004965,
+  "limitations": [
+    "CPU vs CPU; not ASTRA CUDA SIRT or GPU MART",
+    "Noisy measurements, adaptive acquisition, or physical dose not tested",
+    "Epoch and iteration counts are not workload-equivalent",
+    "MART and SIRT use different natural relaxation scales and update rules",
+    "One hand-designed phantom; no generalization claim"
+  ]
+}

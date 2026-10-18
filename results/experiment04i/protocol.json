@@ -1,0 +1,51 @@
+{
+  "experiment": "04I",
+  "stage": "held-out validation",
+  "volume_size": 16,
+  "angles": 12,
+  "tilts": [
+    -20.0,
+    0.0,
+    20.0
+  ],
+  "budgets": [
+    512,
+    1024,
+    2048,
+    4096
+  ],
+  "noise_fractions": [
+    0.0,
+    0.002,
+    0.01
+  ],
+  "noise_definition": "independent Gaussian per full ray, sigma=fraction*RMS(clean full candidate sinogram)",
+  "phantoms": [
+    "shell",
+    "cross",
+    "bands",
+    "ribbon"
+  ],
+  "seeds": [
+    104729,
+    130363,
+    155921
+  ],
+  "sirt_iterations": 400,
+  "candidate_pool": 64,
+  "policies": [
+    "random",
+    "geometry_balanced",
+    "stratified_random",
+    "voxel_coverage_greedy"
+  ],
+  "limitations": [
+    "Analytical held-out phantoms, no external datasets or physical dose model",
+    "Synthetic Gaussian projection noise, not photon-counting Poisson noise",
+    "Seed repeats for geometry_balanced do not constitute independent observations",
+    "Each new phantom is a handcrafted synthetic structure",
+    "Geometry-only rules; no measurement-dependent adaptive acquisition",
+    "Selection overhead is not included in SIRT solver runtime",
+    "The selection time for greedy is for full max-budget order and must not be read as per-budget selection time"
+  ]
+}

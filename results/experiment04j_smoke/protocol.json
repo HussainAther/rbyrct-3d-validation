@@ -1,0 +1,40 @@
+{
+  "experiment": "04J",
+  "design": "exploratory closed-loop pilot",
+  "parameters": {
+    "size": 8,
+    "angles": 4,
+    "budgets": [
+      64,
+      128
+    ],
+    "seeds": [
+      104729
+    ],
+    "phantoms": [
+      "shell",
+      "cross"
+    ],
+    "noise_fractions": [
+      0.0
+    ],
+    "warm_rays": 32,
+    "batch": 32,
+    "provisional_iterations": 15,
+    "sirt_iterations": 20,
+    "candidate_pool": 16,
+    "feedback_strength": 1.0,
+    "output_dir": "results\\experiment04j_smoke"
+  },
+  "forward_operator": "04B CSR Siddon",
+  "reconstructor": "04F same row/column normalized SIRT",
+  "measurement_leakage_rule": "adaptive selector indexes only observed rays; full clean/noisy array is an oracle, never passed wholesale to selector except as indexable simulation source",
+  "limitation": [
+    "Synthetic measurements, not a physical steerable X-ray system",
+    "Gradient scoring is heuristic, not calibrated uncertainty or information gain",
+    "Adaptive selection cost includes repeated provisional SIRT, and final SIRT is restarted from uniform initialization",
+    "Policies assessed on previous 04I phantom families; this is an exploratory development study, not a new independent held-out validation",
+    "Object-swap audit reports data-dependence; a policy may remain unchanged for some objects, seeds and budgets",
+    "Full noise oracle is generated for paired simulation but only acquired indices are read during adaptive acquisition"
+  ]
+}

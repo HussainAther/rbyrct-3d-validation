@@ -1,0 +1,41 @@
+{
+  "study": "04D shared ASTRA line integrals, CPU MART versus GPU SIRT",
+  "astra_version": "2.5.0",
+  "size": 16,
+  "angles_per_tilt": 12,
+  "tilts_deg": [
+    -20,
+    0,
+    20
+  ],
+  "num_rays": 9216,
+  "nonzeros": 188976,
+  "mart_relaxation": 0.15,
+  "mart_epochs": [
+    1,
+    2,
+    4,
+    8,
+    12,
+    20
+  ],
+  "sirt_iterations": [
+    10,
+    25,
+    50,
+    100,
+    200,
+    400
+  ],
+  "forward_discrepancy_relative_l2": 0.028355388298105317,
+  "matrix_build_s": 3.709611099999165,
+  "measurements": "ASTRA CUDA parallel3d_vec forward projections reused by both solvers",
+  "metric_operator": "CPU ray-length system matrix for both methods",
+  "timing": "solver cumulative wall time, excludes projector, matrix build and file IO; CPU vs GPU",
+  "caveats": [
+    "Different CPU/GPU forward discretizations",
+    "Not a matched-compute comparison or clinical benchmark",
+    "SIRT per-iteration and MART per-epoch costs differ",
+    "No evidence of dose or adaptive acquisition advantage"
+  ]
+}

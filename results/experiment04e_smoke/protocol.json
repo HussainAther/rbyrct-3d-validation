@@ -1,0 +1,67 @@
+{
+  "study": "04E projector mismatch localization and MART self-consistency",
+  "astra_version": "2.5.0",
+  "n": 8,
+  "angles_per_tilt": 4,
+  "tilts_deg": [
+    -20.0,
+    0.0,
+    20.0
+  ],
+  "num_rays": 768,
+  "nonzeros": 7744,
+  "impulses": {
+    "center": [
+      4,
+      4,
+      4
+    ],
+    "x_offset": [
+      4,
+      4,
+      6
+    ],
+    "y_offset": [
+      4,
+      2,
+      4
+    ],
+    "z_offset": [
+      6,
+      4,
+      4
+    ],
+    "corner_inside": [
+      2,
+      2,
+      6
+    ]
+  },
+  "impulses_evaluated": [
+    "center",
+    "x_offset",
+    "y_offset",
+    "z_offset",
+    "corner_inside"
+  ],
+  "mart_checkpoints": [
+    1,
+    2
+  ],
+  "mart_relaxation": 0.15,
+  "phantom_forward_discrepancy": {
+    "relative_l2": 0.051249370539851305,
+    "rmse": 0.08345924990946321,
+    "max_abs": 0.41992487794337086,
+    "mean_reference": 1.0797667268152928,
+    "mean_astra": 1.0853815792749326
+  },
+  "projection_order": "(view, detector_v, detector_u); flattened row-major",
+  "fairness": "Both MART conditions use identical CPU sparse A, target, initialization, update rule, and checkpoints; only input measurements differ.",
+  "limitations": [
+    "The ASTRA CUDA projector and exact ray-intersection matrix have different discretizations.",
+    "No physical noise, measured scan, or dose claims.",
+    "MART comparisons are CPU-only and cannot establish GPU performance.",
+    "Impulse errors depend on voxel position and projector discretization."
+  ]
+}

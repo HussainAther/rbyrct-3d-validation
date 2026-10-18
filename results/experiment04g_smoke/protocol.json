@@ -1,0 +1,33 @@
+{
+  "experiment": "04G",
+  "size": 8,
+  "angles_per_tilt": 4,
+  "tilts_degrees": [
+    -20.0,
+    0.0,
+    20.0
+  ],
+  "rays": 768,
+  "budgets": [
+    64,
+    128
+  ],
+  "seed": 104729,
+  "sirt_iterations": 20,
+  "sirt_relaxation": 1.0,
+  "ig_basis_side": 3,
+  "ig_batch": 16,
+  "ig_selection_seconds_for_longest_prefix": 0.037875599999097176,
+  "matrix_build_seconds": 0.1956932000030065,
+  "geometry": "04B explicit CPU Siddon sparse matrix, tilt-major/angle-major/detector row-major",
+  "information_gate": "All policies are measurement-independent; full b is indexed only after ray order is frozen",
+  "limitations": [
+    "Single development phantom, noiseless deterministic simulation",
+    "Information gain is batched approximate covariance-based score, NOT true measurement-adaptive",
+    "Uniform complete-view policy evaluated by scalar-ray prefix (possibly partial final view)",
+    "Policies may have different angular/detector coverage; matched individual-ray count only",
+    "Different design compute cost; no physical dose or scanner timing validation",
+    "Geometry-balanced policy is a deterministic rotated detector schedule, not optimized coverage",
+    "The fixed policy is derived from geometry only; no access to phantom measurements"
+  ]
+}
