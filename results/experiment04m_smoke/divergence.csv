@@ -1,0 +1,7 @@
+stage,phantom,seed,budget,noise_fraction,common_positions,same_set_fraction,sequence_identical
+matched,torus,104729,64,0.0,2,0.3125,False
+matched,beads,104729,64,0.0,3,0.25,False
+fine,torus,104729,64,0.0,2,0.28125,False
+fine,beads,104729,64,0.0,2,0.1875,False
+fine_offset,torus,104729,64,0.0,2,0.125,False
+fine_offset,beads,104729,64,0.0,3,0.15625,False

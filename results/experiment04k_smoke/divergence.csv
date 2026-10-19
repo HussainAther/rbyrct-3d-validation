@@ -1,0 +1,9 @@
+phantom,seed,budget,noise_fraction,comparator,common_positions,same_set_fraction,sequence_identical
+torus,104729,64,0.0,feedback_off,2,0.21875,False
+torus,104729,64,0.0,frozen_greedy,0,0.0625,False
+beads,104729,64,0.0,feedback_off,3,0.25,False
+beads,104729,64,0.0,frozen_greedy,0,0.09375,False
+torus,104729,128,0.0,feedback_off,3,0.3020833333333333,False
+torus,104729,128,0.0,frozen_greedy,0,0.22916666666666666,False
+beads,104729,128,0.0,feedback_off,4,0.3229166666666667,False
+beads,104729,128,0.0,frozen_greedy,0,0.22916666666666666,False

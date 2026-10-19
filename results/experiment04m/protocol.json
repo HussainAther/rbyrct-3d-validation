@@ -1,0 +1,52 @@
+{
+  "experiment": "04M",
+  "parameters": {
+    "size": 16,
+    "angles": 12,
+    "factor": 2,
+    "stages": [
+      "matched",
+      "fine",
+      "fine_offset"
+    ],
+    "geometry_offset": 0.15,
+    "budgets": [
+      512,
+      1024,
+      2048
+    ],
+    "seeds": [
+      104729,
+      130363,
+      155921
+    ],
+    "phantoms": [
+      "torus",
+      "slats",
+      "beads",
+      "wedges"
+    ],
+    "noise_fractions": [
+      0.0,
+      0.01
+    ],
+    "warm_rays": 128,
+    "batch": 64,
+    "provisional_iterations": 60,
+    "sirt_iterations": 400,
+    "candidate_pool": 64,
+    "output_dir": "results\\experiment04m"
+  },
+  "frozen_selector": "experiment_04j.adaptive_order imported without edits",
+  "matched_stage": "Both projection and reconstruction use the coarse 04B matrix; same block-averaged fine reference",
+  "fine_stage": "High-resolution analytic phantom sampled on fine grid and projected using fine ray traversal, coarse-grid reconstruction",
+  "fine_offset_stage": "Fine projector plus fixed detector-plane ray-origin perturbations hidden from reconstruction model",
+  "limitations": [
+    "Synthetic fine-grid Siddon physics still shares underlying parallel-ray assumptions with coarse model",
+    "Not a physically independent simulator or actual CT measurement",
+    "Matched stage truth is coarse block-averaged fine phantom and differs from original 04K coarse-defined truth",
+    "No hardware feasibility or dose claim",
+    "Fixed Gaussian noise defined using full fine sinogram RMS",
+    "Repeated seed and noise combinations are correlated"
+  ]
+}

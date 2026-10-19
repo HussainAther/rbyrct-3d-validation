@@ -1,0 +1,100 @@
+{
+  "experiment": "04L",
+  "analysis_type": "retrospective 04K result audit",
+  "total_metrics": 540,
+  "total_paired_cases": 108,
+  "negative_cases": 15,
+  "groups": [
+    {
+      "phantom": "beads",
+      "budget": 512,
+      "n": 9,
+      "wins": 1,
+      "mean_gain": -0.05738530797720076
+    },
+    {
+      "phantom": "beads",
+      "budget": 1024,
+      "n": 9,
+      "wins": 9,
+      "mean_gain": 0.05236970011974505
+    },
+    {
+      "phantom": "beads",
+      "budget": 2048,
+      "n": 9,
+      "wins": 6,
+      "mean_gain": 0.0043238785047295305
+    },
+    {
+      "phantom": "slats",
+      "budget": 512,
+      "n": 9,
+      "wins": 7,
+      "mean_gain": 0.03587198769440568
+    },
+    {
+      "phantom": "slats",
+      "budget": 1024,
+      "n": 9,
+      "wins": 9,
+      "mean_gain": 0.19466281580481354
+    },
+    {
+      "phantom": "slats",
+      "budget": 2048,
+      "n": 9,
+      "wins": 9,
+      "mean_gain": 0.19564765641993884
+    },
+    {
+      "phantom": "torus",
+      "budget": 512,
+      "n": 9,
+      "wins": 7,
+      "mean_gain": 0.00689785452610774
+    },
+    {
+      "phantom": "torus",
+      "budget": 1024,
+      "n": 9,
+      "wins": 9,
+      "mean_gain": 0.3170717888232257
+    },
+    {
+      "phantom": "torus",
+      "budget": 2048,
+      "n": 9,
+      "wins": 9,
+      "mean_gain": 0.312277920133406
+    },
+    {
+      "phantom": "wedges",
+      "budget": 512,
+      "n": 9,
+      "wins": 9,
+      "mean_gain": 0.06653535338151985
+    },
+    {
+      "phantom": "wedges",
+      "budget": 1024,
+      "n": 9,
+      "wins": 9,
+      "mean_gain": 0.12597170991276913
+    },
+    {
+      "phantom": "wedges",
+      "budget": 2048,
+      "n": 9,
+      "wins": 9,
+      "mean_gain": 0.1893866768406789
+    }
+  ],
+  "warnings": [
+    "Seeds and noise realizations within each phantom are repeated/correlated, not independent anatomical replicates.",
+    "04K cases were already inspected; this is exploratory mechanism/failure analysis.",
+    "Fixed max-budget greedy selection_s cannot be compared directly with per-case online adaptive selection_s.",
+    "Random/geometry-balanced selection costs were not measured in 04K.",
+    "04J/04K use a matched forward/reconstruction operator; no experimental dose model."
+  ]
+}

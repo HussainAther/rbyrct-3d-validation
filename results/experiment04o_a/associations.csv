@@ -1,0 +1,13 @@
+budget,signal,n,pearson_vs_gain,note
+512,earliest_heldout_nrmse,96,-0.42150782341693344,exploratory correlated repeated cases; not an independent predictive validation
+512,latest_heldout_nrmse,96,-0.7060298715964385,exploratory correlated repeated cases; not an independent predictive validation
+512,earliest_feature_instability,96,-0.6515773739184537,exploratory correlated repeated cases; not an independent predictive validation
+512,latest_feature_instability,96,-0.6953226182949509,exploratory correlated repeated cases; not an independent predictive validation
+1024,earliest_heldout_nrmse,96,-0.10957865616093107,exploratory correlated repeated cases; not an independent predictive validation
+1024,latest_heldout_nrmse,96,-0.29213292472638813,exploratory correlated repeated cases; not an independent predictive validation
+1024,earliest_feature_instability,96,-0.0912550896849475,exploratory correlated repeated cases; not an independent predictive validation
+1024,latest_feature_instability,96,-0.10694924150700046,exploratory correlated repeated cases; not an independent predictive validation
+2048,earliest_heldout_nrmse,96,-0.015465765651932476,exploratory correlated repeated cases; not an independent predictive validation
+2048,latest_heldout_nrmse,96,-0.16930150205184155,exploratory correlated repeated cases; not an independent predictive validation
+2048,earliest_feature_instability,96,0.05155661837429779,exploratory correlated repeated cases; not an independent predictive validation
+2048,latest_feature_instability,96,0.06793325812207175,exploratory correlated repeated cases; not an independent predictive validation
