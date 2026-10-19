@@ -1,0 +1,17 @@
+phantom,object_type,offset,relative_projection_mismatch
+branches,replicated,0.0,3.2644784742820483e-16
+branches,replicated,0.15,0.0814829520071377
+branches,subvoxel,0.0,0.14636702655149467
+branches,subvoxel,0.15,0.1518433832891377
+layers,replicated,0.0,2.7241895147705713e-16
+layers,replicated,0.15,0.07630683758845506
+layers,subvoxel,0.0,0.14307489334106405
+layers,subvoxel,0.15,0.14859445610060748
+pores,replicated,0.0,2.626912522380864e-16
+pores,replicated,0.15,0.044737429441113113
+pores,subvoxel,0.0,0.08004720539540262
+pores,subvoxel,0.15,0.0872068321185361
+defects,replicated,0.0,2.5684474306532803e-16
+defects,replicated,0.15,0.04642375111905773
+defects,subvoxel,0.0,0.08171664083562825
+defects,subvoxel,0.15,0.08544738255017048
