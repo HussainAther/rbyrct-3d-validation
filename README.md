@@ -4,6 +4,10 @@ Code and recorded synthetic results for **Adaptive Ray Acquisition in Three-Dime
 
 Study 1 is experiment 04P; Study 2 is experiment 04Q-B. Both use four deterministic analytic phantom families. These are numerical experiments, not physical scanner measurements. Earlier scripts and results document policy development and auxiliary checks.
 
+## Published manuscript archive
+
+Version 1.0-manuscript is archived at https://doi.org/10.5281/zenodo.23600802. The immutable ZIP corresponds to commit cea7b2da99a2de8059d88ebf185ff995aca9f127 (tag v1.0-manuscript). Its SHA-256 is 4ebd171048b745c93360a86ebc8b0a7f871bec65361dfd97a9da9280985aaed0. Later documentation updates do not change that archived snapshot.
+
 ## Installation
 
 Create a clean environment with `conda env create -f environment.yml`, or install `requirements.txt` into Python 3.12. The scientific calculations require Python, NumPy and SciPy; their pins match the original recorded versions. Pandas and Matplotlib are for plotting. ASTRA was used by earlier experiments 04C–04F and is not needed for the manuscript studies or current unit suite.

@@ -1,7 +1,9 @@
-# Archive status on 23 October 2026
+# Manuscript archive completed on 23 October 2026
 
-The prepared source snapshot includes Study 2 code and results, the original repeatability records, all five figure generators, a numerical audit script, acquired-prefix replay tests, portable dependency pins and a SHA-256 manifest. Original scientific CSV/JSON bytes are preserved. The previous count of line-ending-only tracked modifications was outdated: the supplied checkout has 182 such modifications.
+Zenodo version 1.0-manuscript: https://doi.org/10.5281/zenodo.23600802
 
-Before public archival, select a software/data license and publish this complete snapshot. The local prepared archive is not itself a public repository deposit. Create a versioned release, archive the exact release in Zenodo or another repository and obtain its permanent identifier. Then update the manuscript data statement and dataset citation with the verified identifier. Do not claim a DOI or public availability until the deposit resolves and its contents have been checked.
+The published ZIP is the exact Git archive of commit cea7b2da99a2de8059d88ebf185ff995aca9f127. Data/provenance are CC BY 4.0 and code/software documentation/configuration are MIT, as authorized by the author. The uploaded ZIP checksum matches the local archive. Scientific result hashes match those in Supplement S2; all 359 file digests in the archived manifest verified. The DOI has been added to manuscript v1.4.
 
-The publisher requires deposited research data and a link from the article. The original dependency records are provenance, not a portable lockfile. Full cross-platform reproduction remains unperformed.
+The 80-test suite passed on macOS, including the existing small Study 2 end-to-end case. Tables 1–7 were independently recomputed. Full original/repeat Windows runs remain byte-identical for ten scientific CSVs. Full cross-platform numerical replication remains unperformed.
+
+The manuscript, supplement, cover letter, highlights, official publisher competing-interest declaration and five separate figures are delivered outside the source tree. Author review and the journal's submission declarations remain part of actual submission. NDT & E International expects simulation to be accompanied by experimental evidence; this synthetic-only study has a material journal-fit limitation.
