@@ -1,0 +1,63 @@
+{
+  "experiment": "04Q-B",
+  "design": "cross-projector frozen-policy confirmation",
+  "parameters": {
+    "size": 16,
+    "angles": 12,
+    "factor": 2,
+    "phantoms": [
+      "branches",
+      "layers",
+      "pores",
+      "defects"
+    ],
+    "object_types": [
+      "replicated",
+      "subvoxel"
+    ],
+    "offsets": [
+      0.0,
+      0.15
+    ],
+    "budgets": [
+      1024,
+      2048
+    ],
+    "seeds": [
+      271828,
+      314159,
+      577215
+    ],
+    "noise_fractions": [
+      0.0
+    ],
+    "warm_rays": 128,
+    "batch": 64,
+    "provisional_iterations": 60,
+    "diagnostic_iterations": 60,
+    "sirt_iterations": 400,
+    "candidate_pool": 64,
+    "threshold": 2.0,
+    "gate_strength": 0.0,
+    "diagnostic_every": 256,
+    "holdout_fraction": 0.2,
+    "step": 0.25,
+    "output_dir": "results\\experiment04qb_full"
+  },
+  "measurement_generator": "04Q-A independent trilinear ray marching, midpoint integration",
+  "reconstructor": "04B coarse Siddon-like operator with 04J frozen SIRT",
+  "selectors": [
+    "04J full and feedback-off frozen",
+    "04G geometry baseline frozen",
+    "04H coverage baseline frozen",
+    "04O-C gate threshold=2 frozen"
+  ],
+  "limitations": [
+    "Different numerical integration and interpolation, but not independent physical CT",
+    "Fine Siddon projector used for offline diagnostics only",
+    "Seeds and offsets repeated within phantom family are not independent phantoms",
+    "No physical detector/dose/clinical claims",
+    "No threshold optimization on these results",
+    "Noise fraction is an existing synthetic perturbation model"
+  ]
+}
