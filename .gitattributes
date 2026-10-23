@@ -1,0 +1,9 @@
+# Preserve archived source, result and provenance bytes on every platform.
+* -text
+# Keep result files byte-for-byte as written (Python's csv module writes CRLF),
+# so the SHA-256 digests reported in the manuscript match the archived files.
+*.csv  -text
+*.json -text
+*.npy  binary
+*.npz  binary
+*.png  binary
