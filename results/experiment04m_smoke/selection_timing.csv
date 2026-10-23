@@ -1,0 +1,31 @@
+stage,phantom,seed,budget,noise_fraction,policy,selection_s,solver_s,scope
+matched,torus,104729,64,0.0,adaptive_feedback,0.007805200000120749,0.0006952999999612075,online per case
+matched,torus,104729,64,0.0,feedback_off_control,0.007861599999841928,0.0011815000000297005,online per case
+matched,torus,104729,64,0.0,voxel_coverage_greedy,0.026246500000070228,0.0008043000000270695,full max-budget geometry order
+matched,torus,104729,64,0.0,random,0.0,0.0007120999998733168,baseline ordering not timed
+matched,torus,104729,64,0.0,geometry_balanced,0.0,0.0006538000000091415,baseline ordering not timed
+matched,beads,104729,64,0.0,adaptive_feedback,0.007898199999999633,0.0006814000000758824,online per case
+matched,beads,104729,64,0.0,feedback_off_control,0.007419300000037765,0.0006707000000005792,online per case
+matched,beads,104729,64,0.0,voxel_coverage_greedy,0.026246500000070228,0.0014017999999396125,full max-budget geometry order
+matched,beads,104729,64,0.0,random,0.0,0.0007172999999056628,baseline ordering not timed
+matched,beads,104729,64,0.0,geometry_balanced,0.0,0.0006860999999389605,baseline ordering not timed
+fine,torus,104729,64,0.0,adaptive_feedback,0.00825299999996787,0.0019403999999667576,online per case
+fine,torus,104729,64,0.0,feedback_off_control,0.009782999999970343,0.0012067000000115513,online per case
+fine,torus,104729,64,0.0,voxel_coverage_greedy,0.026246500000070228,0.000812700000096811,full max-budget geometry order
+fine,torus,104729,64,0.0,random,0.0,0.002033700000083627,baseline ordering not timed
+fine,torus,104729,64,0.0,geometry_balanced,0.0,0.0018619999998463754,baseline ordering not timed
+fine,beads,104729,64,0.0,adaptive_feedback,0.008169599999973798,0.002327000000150292,online per case
+fine,beads,104729,64,0.0,feedback_off_control,0.007670699999835051,0.0013937999999598105,online per case
+fine,beads,104729,64,0.0,voxel_coverage_greedy,0.026246500000070228,0.0011365000000296277,full max-budget geometry order
+fine,beads,104729,64,0.0,random,0.0,0.0017261999998936517,baseline ordering not timed
+fine,beads,104729,64,0.0,geometry_balanced,0.0,0.0020893000000796746,baseline ordering not timed
+fine_offset,torus,104729,64,0.0,adaptive_feedback,0.01045639999983905,0.0007013000001734326,online per case
+fine_offset,torus,104729,64,0.0,feedback_off_control,0.009251299999959883,0.0020988999999644875,online per case
+fine_offset,torus,104729,64,0.0,voxel_coverage_greedy,0.026246500000070228,0.0007599000000482192,full max-budget geometry order
+fine_offset,torus,104729,64,0.0,random,0.0,0.0013457000000016706,baseline ordering not timed
+fine_offset,torus,104729,64,0.0,geometry_balanced,0.0,0.0015484999998989224,baseline ordering not timed
+fine_offset,beads,104729,64,0.0,adaptive_feedback,0.011462599999958911,0.000722999999879903,online per case
+fine_offset,beads,104729,64,0.0,feedback_off_control,0.010255800000095405,0.0013570000000981963,online per case
+fine_offset,beads,104729,64,0.0,voxel_coverage_greedy,0.026246500000070228,0.0006798000001708715,full max-budget geometry order
+fine_offset,beads,104729,64,0.0,random,0.0,0.0020838000000367174,baseline ordering not timed
+fine_offset,beads,104729,64,0.0,geometry_balanced,0.0,0.0009218999998665822,baseline ordering not timed

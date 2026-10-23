@@ -1,0 +1,3 @@
+seed,budget,noise_fraction,phantom_a,phantom_b,common_positions,same_set_fraction,sequence_identical
+104729,64,0.0,torus,beads,15,0.59375,False
+104729,128,0.0,torus,beads,19,0.375,False

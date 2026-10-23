@@ -1,0 +1,11 @@
+# Portable pins, not a lock of the original Windows binary build.
+name: rbyrct-3d
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.15
+  - numpy=2.5.4
+  - scipy=1.18.1
+  # Figure generation only.
+  - pandas=3.0.5
+  - matplotlib=3.11.2

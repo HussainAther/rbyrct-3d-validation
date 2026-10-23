@@ -1,0 +1,57 @@
+{
+  "experiment": "04O-A",
+  "phase": "exploratory reliability signal validation; selector unchanged",
+  "parameters": {
+    "size": 16,
+    "angles": 12,
+    "factor": 2,
+    "object_types": [
+      "replicated",
+      "subvoxel"
+    ],
+    "offsets": [
+      0.0,
+      0.05,
+      0.15,
+      0.3
+    ],
+    "budgets": [
+      512,
+      1024,
+      2048
+    ],
+    "seeds": [
+      104729,
+      130363,
+      155921
+    ],
+    "phantoms": [
+      "torus",
+      "slats",
+      "beads",
+      "wedges"
+    ],
+    "noise_fractions": [
+      0.0
+    ],
+    "warm_rays": 128,
+    "batch": 64,
+    "provisional_iterations": 60,
+    "sirt_iterations": 400,
+    "candidate_pool": 64,
+    "holdout_fraction": 0.2,
+    "diagnostic_prefixes": 3,
+    "output_dir": "results\\experiment04o_a"
+  },
+  "diagnostic_definition": "Holdout and disjoint feature-map split on acquired prefix; never reads unacquired observations",
+  "label_definition": "After acquisition, reconstruction RMSE relative to feedback-off using truth",
+  "limitations": [
+    "Uses previously explored phantom families; no heldout validation",
+    "Feature stability is not calibrated uncertainty",
+    "Same evaluation data used for signal/gain associations",
+    "Holdout validation holds out acquired rays from fitting, but rays were chosen adaptively",
+    "Subset features can be unstable simply from sparse sampling",
+    "Operator families share underlying tracing physics",
+    "Selection overhead measured separately and baseline timing not comparable"
+  ]
+}

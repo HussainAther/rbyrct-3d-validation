@@ -1,0 +1,47 @@
+{
+  "experiment": "04K",
+  "design": "prospective-style additional analytical phantom family validation, not external validation",
+  "frozen_source": "experiment_04j.adaptive_order and experiment_04j.sirt_silent imported without edits",
+  "parameters": {
+    "size": 16,
+    "angles": 12,
+    "budgets": [
+      512,
+      1024,
+      2048
+    ],
+    "seeds": [
+      104729,
+      130363,
+      155921
+    ],
+    "phantoms": [
+      "torus",
+      "slats",
+      "beads",
+      "wedges"
+    ],
+    "noise_fractions": [
+      0.0,
+      0.002,
+      0.01
+    ],
+    "warm_rays": 128,
+    "batch": 64,
+    "provisional_iterations": 60,
+    "sirt_iterations": 400,
+    "candidate_pool": 64,
+    "feedback_strength": 1.0,
+    "output_dir": "results\\experiment04k"
+  },
+  "note": "04I shell/cross/bands/ribbon were already used for 04J development and are NOT 04K validation objects.",
+  "limitations": [
+    "Four new but handcrafted synthetic phantom families; not patient or measured CT data",
+    "Reuse of 04J scoring rule and hyperparameters, but not a preregistered external study",
+    "Three seeds/noise levels on four families are correlated repeated measures",
+    "Gaussian projection noise rather than Poisson photon counting or realistic system artifacts",
+    "Same CPU sparse forward model for both simulation and reconstruction; inverse crime",
+    "Selection time includes online provisional reconstructions; baseline ordering times not comparable",
+    "No physical dose, clinical efficacy, or hardware feasibility claims"
+  ]
+}

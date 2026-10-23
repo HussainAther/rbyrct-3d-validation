@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+RBYRCT_3D_*.docx
+RBYRCT_3D_*.pdf
+*.zip
+Figure*.png
+figures/
+rerun/

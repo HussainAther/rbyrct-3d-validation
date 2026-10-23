@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-23",
+  "source_base_commit": "f6fe68e",
+  "checks": [
+    "All 77 existing tests and three acquired-prefix replay tests passed",
+    "Tables 1\u20137 match independent recomputation",
+    "960 metric rows and 768 paired comparisons checked",
+    "Ten scientific repeat files byte-identical",
+    "Full protocols match except output_dir"
+  ],
+  "scope": "Full Windows studies were not rerun. macOS unit suite includes a small Study 2 end-to-end simulation. Numerical acquisition code and published scientific files are unchanged.",
+  "archive_status": "No Zenodo DOI has been minted for this preparation snapshot."
+}

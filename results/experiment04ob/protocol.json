@@ -1,0 +1,35 @@
+{
+  "experiment": "04O-B",
+  "purpose": "acquired-only reliability audit and out-of-family predictive validation",
+  "original_label_file": "results\\experiment04o_a\\paired_cases.csv",
+  "parameters": {
+    "paired_cases": "results\\experiment04o_a\\paired_cases.csv",
+    "output_dir": "results\\experiment04ob",
+    "size": 16,
+    "angles": 12,
+    "factor": 2,
+    "warm_rays": 128,
+    "batch": 64,
+    "provisional_iterations": 60,
+    "diagnostic_iterations": 60,
+    "candidate_pool": 64,
+    "holdout_fraction": 0.2,
+    "checkpoints": [
+      128,
+      256,
+      448,
+      768,
+      960,
+      1536
+    ]
+  },
+  "limitations": [
+    "No online gate implemented",
+    "Labels from original 04O-A run; source protocol must match",
+    "Checkpoints precede final acquisition; later checkpoints not causal tests of the next-batch outcome",
+    "Holdout rays were adaptively sampled",
+    "Cases share 4 phantom families and repeated seeds/offsets",
+    "Family-holdout is exploratory with only four families; thresholds chosen within training families",
+    "AUC undefined if test family has a single outcome class"
+  ]
+}

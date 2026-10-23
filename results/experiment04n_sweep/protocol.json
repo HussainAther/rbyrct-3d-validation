@@ -1,0 +1,58 @@
+{
+  "experiment": "04N",
+  "parameters": {
+    "size": 16,
+    "angles": 12,
+    "factor": 2,
+    "object_types": [
+      "replicated",
+      "subvoxel"
+    ],
+    "offsets": [
+      0.0,
+      0.05,
+      0.15,
+      0.3
+    ],
+    "budgets": [
+      512,
+      1024,
+      2048
+    ],
+    "seeds": [
+      104729,
+      130363,
+      155921
+    ],
+    "phantoms": [
+      "torus",
+      "slats",
+      "beads",
+      "wedges"
+    ],
+    "noise_fractions": [
+      0.0
+    ],
+    "warm_rays": 128,
+    "batch": 64,
+    "provisional_iterations": 60,
+    "sirt_iterations": 400,
+    "candidate_pool": 64,
+    "output_dir": "results\\experiment04n_sweep"
+  },
+  "controls": [
+    "replicated: same coarse piecewise-constant object in both grids",
+    "subvoxel: fine analytic object, evaluate vs its block average",
+    "offset sweep: perturb fine detector ray origins only"
+  ],
+  "frozen_selector": "04J adaptive_order imported unchanged",
+  "cautions": [
+    "03D/04K phantom families have been used in development; mechanistic analysis not new holdout",
+    "Fine and coarse operators share ray traversal physics, so not a truly independent physical simulator",
+    "Noise and seeds are correlated repeated conditions, not independent populations",
+    "Ground truth feature maps only used in post-hoc audit, never selector",
+    "Feature correlation does not prove causality",
+    "Time for precomputed frozen greedy differs in scope from online selection",
+    "No clinical dose or hardware claim"
+  ]
+}
