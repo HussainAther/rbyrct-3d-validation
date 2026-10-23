@@ -1,0 +1,30 @@
+{
+  "title": "Three-dimensional adaptive ray acquisition validation: source code and synthetic results",
+  "upload_type": "dataset",
+  "description": "Source code and original and repeated numerical result files for Adaptive Ray Acquisition in Three-Dimensional Tomography: Reconstruction Benefits and Failure Modes Under Forward-Model Mismatch. Study 1 (04P) and Study 2 (04Q-B) each contain 96 matched synthetic scenarios and 480 reconstructions. Includes five-figure generation, numerical/table audit scripts, 80 tests, original Windows provenance and SHA-256 manifest. Four shared analytic phantom families; noiseless parallel-ray simulation; no physical scanner validation. Data and provenance: CC BY 4.0. Python code and associated software documentation/configuration: MIT. Full benchmark repetition established only within the original environment; macOS preparation checks are unit tests and a small end-to-end simulation.",
+  "creators": [
+    {
+      "name": "Ather, Syed Hussain",
+      "affiliation": "Independent Researcher",
+      "orcid": "0000-0002-2691-5589"
+    }
+  ],
+  "version": "1.0-manuscript",
+  "publication_date": "2026-10-23",
+  "license": "cc-by-4.0",
+  "access_right": "open",
+  "keywords": [
+    "computed tomography",
+    "adaptive acquisition",
+    "model mismatch",
+    "synthetic validation",
+    "reproducibility"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/HussainAther/rbyrct-3d-validation",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

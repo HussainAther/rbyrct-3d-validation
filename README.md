@@ -48,3 +48,7 @@ Published metrics digests:
 - Study 2: `50b03f2d14d6eb2046dfb19021bc53a4bd274073597543f45fce642cab7f246a`
 
 `.gitattributes` disables line-ending conversion for scientific CSV and JSON files. Do not save these files with tools that rewrite line endings. Manuscript files, generated figures and delivery ZIPs are excluded from Git.
+
+## License
+
+Python code and software documentation/configuration are MIT licensed (LICENSE_CODE.txt). Scientific data and provenance in results/ and validation/ are CC BY 4.0 (DATA_LICENSE.txt). These licenses were approved by the author on 23 October 2026.
