@@ -1,0 +1,104 @@
+test_adaptive_feedback_replay (test_causal_replay.TestCausalReplay.test_adaptive_feedback_replay) ... ok
+test_feedback_off_replay (test_causal_replay.TestCausalReplay.test_feedback_off_replay) ... ok
+test_reject_deliberate_future_read (test_causal_replay.TestCausalReplay.test_reject_deliberate_future_read) ... ok
+test_bad_relaxation (test_experiment_04f.Test04F.test_bad_relaxation) ... ok
+test_both_solvers_identity (test_experiment_04f.Test04F.test_both_solvers_identity) ... ok
+test_checkpoints (test_experiment_04f.Test04F.test_checkpoints) ... ok
+test_sparse_unobserved_and_empty (test_experiment_04f.Test04F.test_sparse_unobserved_and_empty) ... ok
+test_acquisition_uses_selected_measurements (test_experiment_04g.Test04G.test_acquisition_uses_selected_measurements) ... ok
+test_basis_orthonormal (test_experiment_04g.Test04G.test_basis_orthonormal) ... ok
+test_geometry_only_ig_deterministic (test_experiment_04g.Test04G.test_geometry_only_ig_deterministic) ... ok
+test_policies_permutations_and_prefixes (test_experiment_04g.Test04G.test_policies_permutations_and_prefixes) ... ok
+test_coverage_no_measurements (test_experiment_04h.Test04H.test_coverage_no_measurements) ... ok
+test_greedy_determinism_and_unique (test_experiment_04h.Test04H.test_greedy_determinism_and_unique) ... ok
+test_phantoms_differ (test_experiment_04h.Test04H.test_phantoms_differ) ... ok
+test_stratified_permutation_and_balancing (test_experiment_04h.Test04H.test_stratified_permutation_and_balancing) ... ok
+test_greedy_unique_fixed_seed (test_experiment_04i.Test04I.test_greedy_unique_fixed_seed) ... ok
+test_noise_reproducible_and_zero (test_experiment_04i.Test04I.test_noise_reproducible_and_zero) ... ok
+test_paired_win_definition (test_experiment_04i.Test04I.test_paired_win_definition) ... ok
+test_phantoms_new_and_finite (test_experiment_04i.Test04I.test_phantoms_new_and_finite) ... ok
+test_divergence (test_experiment_04j.Test04J.test_divergence) ... ok
+test_features_respond_to_data (test_experiment_04j.Test04J.test_features_respond_to_data) ... ok
+test_no_future_measurement_leakage (test_experiment_04j.Test04J.test_no_future_measurement_leakage) ... ok
+test_sirt_identity (test_experiment_04j.Test04J.test_sirt_identity) ... ok
+test_unique_and_prefix (test_experiment_04j.Test04J.test_unique_and_prefix) ... ok
+test_imported_selector_respects_unobserved_oracle (test_experiment_04k.Test04K.test_imported_selector_respects_unobserved_oracle) ... ok
+test_new_shapes (test_experiment_04k.Test04K.test_new_shapes) ... ok
+test_noise_seed_reproducibility (test_experiment_04k.Test04K.test_noise_seed_reproducibility) ... ok
+test_paired_gain (test_experiment_04k.Test04K.test_paired_gain) ... ok
+test_audit_negative_cases (test_experiment_04l.Test04L.test_audit_negative_cases) ... MART epoch=  1 rmse=0.232919 residual=0.390007 time=0.00s
+MART epoch= 30 rmse=0.000000 residual=0.000000 time=0.00s
+SIRT iter=  1 rmse=0.000000 residual=0.000000 time=0.00s
+SIRT iter=  2 rmse=0.000000 residual=0.000000 time=0.00s
+SIRT iter=  2 rmse=0.244949 residual=0.000000 time=0.00s
+SIRT iter=  3 rmse=1.394633 residual=0.000000 time=0.00s
+SIRT iter=  3 rmse=1.394633 residual=0.000000 time=0.00s
+04L audit: 1 paired conditions; 1 adaptive non-wins; results: /var/folders/t1/xdwg0z6x7s79gvh6t7v_3jkh0000gp/T/tmpr0icu8ni/out
+ok
+test_duplicate_case_guard (test_experiment_04l.Test04L.test_duplicate_case_guard) ... ok
+test_iteration_groups_do_not_mix (test_experiment_04l.Test04L.test_iteration_groups_do_not_mix) ... ok
+test_pairwise_math (test_experiment_04l.Test04L.test_pairwise_math) ... ok
+test_forward_mismatch_is_real (test_experiment_04m.Test04M.test_forward_mismatch_is_real) ... ok
+test_geometry_offset_changes_operator (test_experiment_04m.Test04M.test_geometry_offset_changes_operator) ... ok
+test_pairing_and_unique_cases (test_experiment_04m.Test04M.test_pairing_and_unique_cases) ... ok
+test_shapes_and_nonnegativity (test_experiment_04m.Test04M.test_shapes_and_nonnegativity) ... ok
+test_uniform_phantom_integrals_agree (test_experiment_04m.Test04M.test_uniform_phantom_integrals_agree) ... ok
+test_exact_replication (test_experiment_04n.Test04N.test_exact_replication) ... ok
+test_features_only_acquired_indices (test_experiment_04n.Test04N.test_features_only_acquired_indices) ... ok
+test_incomplete_case_rejected (test_experiment_04n.Test04N.test_incomplete_case_rejected) ... ok
+test_paired_gain (test_experiment_04n.Test04N.test_paired_gain) ... ok
+test_replication_and_subvoxel_have_same_dimensions (test_experiment_04n.Test04N.test_replication_and_subvoxel_have_same_dimensions) ... ok
+test_incomplete_case_rejected (test_experiment_04o.Test04O.test_incomplete_case_rejected) ... ok
+test_no_unacquired_measurements (test_experiment_04o.Test04O.test_no_unacquired_measurements) ... ok
+test_pairing (test_experiment_04o.Test04O.test_pairing) ... ok
+test_reliability_repeatable (test_experiment_04o.Test04O.test_reliability_repeatable) ... ok
+test_signal_requires_matching_case (test_experiment_04o.Test04O.test_signal_requires_matching_case) ... ok
+test_auc_perfect (test_experiment_04ob.Test04OB.test_auc_perfect) ... ok
+test_holdout_prevents_training_on_same_phantom (test_experiment_04ob.Test04OB.test_holdout_prevents_training_on_same_phantom) ... ok
+test_one_class_undefined (test_experiment_04ob.Test04OB.test_one_class_undefined) ... ok
+test_scenario_grouping (test_experiment_04ob.Test04OB.test_scenario_grouping) ... ok
+test_threshold_training_only (test_experiment_04ob.Test04OB.test_threshold_training_only) ... ok
+test_exact_frozen_feedback_and_off (test_experiment_04oc.Test04OC.test_exact_frozen_feedback_and_off) ... ok
+test_no_future_observation_changes_early_decisions (test_experiment_04oc.Test04OC.test_no_future_observation_changes_early_decisions) ... ok
+test_oracle_restricts_future (test_experiment_04oc.Test04OC.test_oracle_restricts_future) ... ok
+test_pairing_rejects_incomplete (test_experiment_04oc.Test04OC.test_pairing_rejects_incomplete) ... ok
+test_repeatable_gate (test_experiment_04oc.Test04OC.test_repeatable_gate) ... ok
+test_exposure_weighted_by_rays_not_checks (test_experiment_04od.Test04OD.test_exposure_weighted_by_rays_not_checks) ... ok
+test_matched_object_requires_both (test_experiment_04od.Test04OD.test_matched_object_requires_both) ... ok
+test_missing_policy_is_rejected (test_experiment_04od.Test04OD.test_missing_policy_is_rejected) ... ok
+test_rejects_duplicate_checkpoint (test_experiment_04od.Test04OD.test_rejects_duplicate_checkpoint) ... ok
+test_rejects_final_checkpoint (test_experiment_04od.Test04OD.test_rejects_final_checkpoint) ... ok
+test_new_families_distinct (test_experiment_04p.Test04P.test_new_families_distinct) ... ok
+test_new_family_shapes_and_finite (test_experiment_04p.Test04P.test_new_family_shapes_and_finite) ... ok
+test_object_replication (test_experiment_04p.Test04P.test_object_replication) ... ok
+test_pair_reject_incomplete (test_experiment_04p.Test04P.test_pair_reject_incomplete) ... ok
+test_pair_sign (test_experiment_04p.Test04P.test_pair_sign) ... ok
+test_subvoxel_block_average (test_experiment_04p.Test04P.test_subvoxel_block_average) ... ok
+test_constant_volume_analytic_chord (test_experiment_04qa.Test04QA.test_constant_volume_analytic_chord) ... ok
+test_invalid_args_and_shape (test_experiment_04qa.Test04QA.test_invalid_args_and_shape) ... ok
+test_linear_affine_central_ray (test_experiment_04qa.Test04QA.test_linear_affine_central_ray) ... ok
+test_nearest_matches_siddon_limit (test_experiment_04qa.Test04QA.test_nearest_matches_siddon_limit) ... ok
+test_outside_misses (test_experiment_04qa.Test04QA.test_outside_misses) ... ok
+test_projection_geometry_order (test_experiment_04qa.Test04QA.test_projection_geometry_order) ... ok
+test_step_refinement (test_experiment_04qa.Test04QA.test_step_refinement) ... ok
+test_end_to_end_small (test_experiment_04qb.Test04QB.test_end_to_end_small) ... 04Q-B branches replicated offset=0 seed=271828 b=64 adaptive_feedback      RMSE=0.133592
+04Q-B branches replicated offset=0 seed=271828 b=64 feedback_off_control   RMSE=0.130370
+04Q-B branches replicated offset=0 seed=271828 b=64 geometry_balanced      RMSE=0.160354
+04Q-B branches replicated offset=0 seed=271828 b=64 voxel_coverage_greedy  RMSE=0.133024
+04Q-B branches replicated offset=0 seed=271828 b=64 reliability_gate       RMSE=0.130370
+04Q-B branches subvoxel   offset=0 seed=271828 b=64 adaptive_feedback      RMSE=0.127083
+04Q-B branches subvoxel   offset=0 seed=271828 b=64 feedback_off_control   RMSE=0.121818
+04Q-B branches subvoxel   offset=0 seed=271828 b=64 geometry_balanced      RMSE=0.152363
+04Q-B branches subvoxel   offset=0 seed=271828 b=64 voxel_coverage_greedy  RMSE=0.124902
+04Q-B branches subvoxel   offset=0 seed=271828 b=64 reliability_gate       RMSE=0.121818
+04Q-B complete: 2 matched cases; 10 reconstructions; output=/var/folders/t1/xdwg0z6x7s79gvh6t7v_3jkh0000gp/T/tmpqe2araqm
+ok
+test_frozen_policy_list (test_experiment_04qb.Test04QB.test_frozen_policy_list) ... ok
+test_independent_projector_not_same_as_coarse_operator (test_experiment_04qb.Test04QB.test_independent_projector_not_same_as_coarse_operator) ... ok
+test_paired_table_rejects_missing_policy (test_experiment_04qb.Test04QB.test_paired_table_rejects_missing_policy) ... ok
+test_replicated_volume_can_still_disagree (test_experiment_04qb.Test04QB.test_replicated_volume_can_still_disagree) ... ok
+
+----------------------------------------------------------------------
+Ran 80 tests in 0.449s
+
+OK

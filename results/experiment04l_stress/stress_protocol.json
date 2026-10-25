@@ -1,0 +1,47 @@
+{
+  "experiment": "04L",
+  "mode": "exploratory stress",
+  "parameters": {
+    "mode": "stress",
+    "input_dir": "results\\experiment04k",
+    "output_dir": "results\\experiment04l_stress",
+    "size": 16,
+    "angles": 12,
+    "budgets": [
+      512,
+      1024,
+      2048
+    ],
+    "warm_rays": 128,
+    "batch": 64,
+    "provisional_iterations": 60,
+    "candidate_pool": 64,
+    "sirt_iterations": [
+      200,
+      400,
+      800
+    ],
+    "noise_fractions": [
+      0.0,
+      0.03,
+      0.1
+    ],
+    "seeds": [
+      104729
+    ],
+    "phantoms": [
+      "torus",
+      "beads",
+      "slats",
+      "wedges"
+    ]
+  },
+  "selection_rule": "Imported frozen 04J adaptive_order; feedback_strength=1.0 / off=0.0",
+  "notes": [
+    "SIRT iteration count affects final reconstruction ONLY; it does not alter ray selections.",
+    "Measurement oracle generated for simulation; adaptive_order only indexes acquired measurements.",
+    "Noise fractions 0.03 and 0.1 are stress tests, not a photon-counting model.",
+    "Selection costs include repeated provisional SIRT; timing comparisons are not normalized for setup and reuse.",
+    "Stress results reuse previously examined 04K phantoms; they are not independent validation."
+  ]
+}

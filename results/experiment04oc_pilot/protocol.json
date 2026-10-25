@@ -1,0 +1,50 @@
+{
+  "experiment": "04O-C",
+  "parameters": {
+    "size": 16,
+    "angles": 12,
+    "factor": 2,
+    "object_types": [
+      "replicated",
+      "subvoxel"
+    ],
+    "offsets": [
+      0.0,
+      0.15
+    ],
+    "phantoms": [
+      "torus",
+      "beads"
+    ],
+    "seeds": [
+      104729
+    ],
+    "budgets": [
+      1024,
+      2048
+    ],
+    "noise_fractions": [
+      0.0
+    ],
+    "warm_rays": 128,
+    "batch": 64,
+    "provisional_iterations": 60,
+    "diagnostic_iterations": 60,
+    "sirt_iterations": 400,
+    "candidate_pool": 64,
+    "threshold": 2.0,
+    "gate_strength": 0.0,
+    "constant_strength": 0.25,
+    "diagnostic_every": 256,
+    "holdout_fraction": 0.2,
+    "output_dir": "results\\experiment04oc_pilot"
+  },
+  "limitations": [
+    "Synthetic only",
+    "Gate threshold predeclared heuristic, not validated",
+    "Holdout samples from adaptively selected acquired rays",
+    "No new independent phantom families",
+    "Not a clinical or dose validation",
+    "No ground-truth oracle used during selection"
+  ]
+}

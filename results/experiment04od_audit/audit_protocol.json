@@ -1,0 +1,16 @@
+{
+  "experiment": "04O-D",
+  "type": "offline post-hoc audit; no new reconstructions",
+  "input_dir": "results\\experiment04oc_full",
+  "cases": 96,
+  "matched_object_pairs": 48,
+  "observed_checkpoints": 576,
+  "limitations": [
+    "Trace records decisions only at diagnostic checkpoints; strength is assumed constant between checkpoints.",
+    "Pre-first-checkpoint warm rays are excluded from controlled fractions.",
+    "No saved per-ray sequence; exact divergence between checkpoints cannot be inferred from gate trace.",
+    "Associations between intervention timing and RMSE are descriptive, not causal effects.",
+    "Existing four phantom families are reused; this is not independent confirmation.",
+    "Missing optional timing/divergence inputs yield blank fields."
+  ]
+}
