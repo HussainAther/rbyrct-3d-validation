@@ -1,4 +1,4 @@
-"""04K: frozen 04J measurement-feedback acquisition on NEW analytical 3D phantoms.
+"""04K: frozen 04J measurement-feedback acquisition on NEW analytical 3D phantoms. 
 
 Imports 04J's adaptive_order / sirt_silent unchanged. This is a synthetic
 out-of-family validation, not external or clinical validation. No selection
