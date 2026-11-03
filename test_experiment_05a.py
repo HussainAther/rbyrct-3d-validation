@@ -40,3 +40,26 @@ def test_small_fine_projector():
     assert result["matrix_shape"] == [32, 512]
     assert result["nonzeros"] > 0
     assert result["csr_storage_mib"] > 0
+
+
+def test_uniform_coarse_fine_agreement():
+    import numpy as np
+    from experiment_04b import system_matrix
+    from experiment_04m import high_resolution_matrix
+
+    n = 4
+    angles = 2
+    tilts = [0.0]
+    factor = 2
+
+    coarse = system_matrix(n, angles, tilts)
+    fine = high_resolution_matrix(
+        n, angles, tilts, factor=factor, offset=0.0
+    )
+
+    coarse_y = coarse @ np.ones(n**3)
+    fine_y = fine @ np.ones((n * factor)**3)
+
+    assert np.allclose(
+        coarse_y, fine_y, rtol=1e-10, atol=1e-10
+    )
