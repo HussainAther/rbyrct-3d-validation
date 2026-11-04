@@ -1,12 +1,14 @@
 ﻿
 """RBYRCT-05A: computational scaling feasibility benchmark.
 
-05A-01: coarse 3D sparse-projector construction.
-05A-02: fine-grid measurement projector construction.
-05A-03: coarse/fine uniform-volume projection consistency.
+05A-01: Coarse 3D sparse-projector construction.
+05A-02: Fine-grid measurement-projector construction.
+05A-03: Coarse/fine uniform-volume projection consistency.
+05A-04: Reduced SIRT reconstruction feasibility.
 
-This benchmark evaluates numerical correctness and computational feasibility.
-It does not evaluate adaptive acquisition superiority or physical CT dose.
+This benchmark evaluates numerical correctness and computational
+feasibility. It does not establish adaptive acquisition superiority,
+physical CT validation, or radiation-dose reduction.
 """
 from __future__ import annotations
 
@@ -27,13 +29,17 @@ from experiment_04m import high_resolution_matrix
 
 
 DEFAULT_TILTS = [-20.0, 0.0, 20.0]
-DEFAULT_OUTPUT = "results/experiment05a_scaling/coarse_report.json"
+DEFAULT_OUTPUT = (
+    "results/experiment05a_scaling/coarse_report.json"
+)
 
 
 def available_ram_gib() -> float:
     """Return available physical RAM in GiB on Windows."""
     if platform.system() != "Windows":
-        raise OSError("This memory check currently requires Windows")
+        raise OSError(
+            "This memory check currently requires Windows"
+        )
 
     class MemoryStatus(ctypes.Structure):
         _fields_ = [
@@ -56,13 +62,15 @@ def available_ram_gib() -> float:
     )
 
     if not success:
-        raise OSError("Could not retrieve Windows memory status")
+        raise OSError(
+            "Could not retrieve Windows memory status"
+        )
 
     return status.ullAvailPhys / (1024**3)
 
 
 def sparse_storage_mib(matrix) -> float:
-    """Return CSR array storage in MiB (not total process memory)."""
+    """Return CSR array storage in MiB, excluding process overhead."""
     return (
         matrix.data.nbytes
         + matrix.indices.nbytes
@@ -88,9 +96,15 @@ def benchmark_coarse(
             len(tilts) * angles * size * size,
             size**3,
         ),
-        "finite_matrix": bool(np.isfinite(A.data).all()),
-        "nonnegative_path_lengths": bool((A.data >= 0).all()),
-        "finite_projection": bool(np.isfinite(y).all()),
+        "finite_matrix": bool(
+            np.isfinite(A.data).all()
+        ),
+        "nonnegative_path_lengths": bool(
+            (A.data >= 0).all()
+        ),
+        "finite_projection": bool(
+            np.isfinite(y).all()
+        ),
     }
 
     return {
@@ -117,6 +131,7 @@ def benchmark_fine(
 ) -> dict:
     """Benchmark fine-grid measurement construction at zero offset."""
     start = time.perf_counter()
+
     A = high_resolution_matrix(
         size,
         angles,
@@ -124,6 +139,7 @@ def benchmark_fine(
         factor=factor,
         offset=0.0,
     )
+
     elapsed = time.perf_counter() - start
 
     x = np.ones(A.shape[1], dtype=np.float64)
@@ -134,9 +150,15 @@ def benchmark_fine(
             len(tilts) * angles * size * size,
             (size * factor) ** 3,
         ),
-        "finite_matrix": bool(np.isfinite(A.data).all()),
-        "nonnegative_path_lengths": bool((A.data >= 0).all()),
-        "finite_projection": bool(np.isfinite(y).all()),
+        "finite_matrix": bool(
+            np.isfinite(A.data).all()
+        ),
+        "nonnegative_path_lengths": bool(
+            (A.data >= 0).all()
+        ),
+        "finite_projection": bool(
+            np.isfinite(y).all()
+        ),
     }
 
     return {
@@ -161,12 +183,14 @@ def benchmark_uniform_agreement(
     tilts: list[float],
     factor: int = 2,
 ) -> dict:
-    """Check matching coarse/fine ray integrals for a uniform object.
+    """Compare coarse/fine ray integrals for a uniform object.
 
-    Both operators use zero geometric offset. This checks a basic
-    geometric invariant, not agreement for arbitrary objects.
+    Both operators use zero geometric offset.
+    This tests a geometric invariant, not general operator
+    equivalence for arbitrary objects.
     """
     coarse = system_matrix(size, angles, tilts)
+
     fine = high_resolution_matrix(
         size,
         angles,
@@ -175,15 +199,28 @@ def benchmark_uniform_agreement(
         offset=0.0,
     )
 
-    coarse_y = coarse @ np.ones(coarse.shape[1], dtype=np.float64)
-    fine_y = fine @ np.ones(fine.shape[1], dtype=np.float64)
+    coarse_y = coarse @ np.ones(
+        coarse.shape[1],
+        dtype=np.float64,
+    )
 
-    matching_ray_counts = coarse.shape[0] == fine.shape[0]
+    fine_y = fine @ np.ones(
+        fine.shape[1],
+        dtype=np.float64,
+    )
+
+    matching_ray_counts = (
+        coarse.shape[0] == fine.shape[0]
+    )
 
     if matching_ray_counts:
-        differences = np.abs(coarse_y - fine_y)
+        differences = np.abs(
+            coarse_y - fine_y
+        )
+
         max_error = float(differences.max())
         mean_error = float(differences.mean())
+
         agreement = bool(
             np.allclose(
                 coarse_y,
@@ -206,8 +243,12 @@ def benchmark_uniform_agreement(
         "stage": "05A-03",
         "size": size,
         "factor": factor,
-        "ray_count_coarse": int(coarse.shape[0]),
-        "ray_count_fine": int(fine.shape[0]),
+        "ray_count_coarse": int(
+            coarse.shape[0]
+        ),
+        "ray_count_fine": int(
+            fine.shape[0]
+        ),
         "maximum_absolute_difference": max_error,
         "mean_absolute_difference": mean_error,
         "checks": checks,
@@ -215,13 +256,194 @@ def benchmark_uniform_agreement(
     }
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="RBYRCT-05A: 3D projector scaling feasibility benchmark."
+def benchmark_sirt(
+    size: int = 16,
+    angles: int = 12,
+    tilts: list[float] | None = None,
+    budget: int = 256,
+    iterations: int = 40,
+    seed: int = 271828,
+) -> dict:
+    """Benchmark reduced SIRT reconstruction on a synthetic sphere.
+
+    Uses the same coarse projector for measurement generation
+    and reconstruction. This is an inverse-crime numerical
+    smoke test, not independent forward-model validation.
+    """
+    from experiment_04j import sirt_silent
+
+    if tilts is None:
+        tilts = list(DEFAULT_TILTS)
+
+    if size < 4 or angles < 2 or not tilts:
+        raise ValueError(
+            "Invalid reconstruction geometry"
+        )
+
+    if budget < 1 or iterations < 1:
+        raise ValueError(
+            "Budget and iterations must be positive"
+        )
+
+    total_rays = (
+        len(tilts) * angles * size**2
     )
 
-    parser.add_argument("--size", type=int, default=16)
-    parser.add_argument("--angles", type=int, default=12)
+    if budget > total_rays:
+        raise ValueError(
+            "Budget exceeds available rays"
+        )
+
+    start = time.perf_counter()
+
+    A = system_matrix(
+        size,
+        angles,
+        tilts,
+    )
+
+    matrix_seconds = (
+        time.perf_counter() - start
+    )
+
+    # Construct a deterministic synthetic sphere.
+    z, y, x = np.indices(
+        (size, size, size)
+    )
+
+    center = (size - 1) / 2.0
+    radius = size / 4.0
+
+    truth = (
+        (x - center) ** 2
+        + (y - center) ** 2
+        + (z - center) ** 2
+        <= radius**2
+    ).astype(np.float64).ravel()
+
+    # Generate noiseless measurements with the coarse operator.
+    measurements = A @ truth
+
+    # Select a reproducible random subset of rays.
+    rng = np.random.default_rng(seed)
+
+    selected = np.sort(
+        rng.choice(
+            A.shape[0],
+            size=budget,
+            replace=False,
+        )
+    )
+
+    selected_A = A[selected].tocsr()
+    selected_b = measurements[selected]
+
+    # Measure initial data residual.
+    initial = np.full(
+        size**3,
+        0.3,
+        dtype=np.float64,
+    )
+
+    initial_residual = float(
+        np.linalg.norm(
+            selected_A @ initial - selected_b
+        )
+    )
+
+    # Reuse the validated 04J SIRT implementation.
+    start = time.perf_counter()
+
+    reconstruction = sirt_silent(
+        selected_A,
+        selected_b,
+        iterations=iterations,
+        initial=0.3,
+    )
+
+    reconstruction_seconds = (
+        time.perf_counter() - start
+    )
+
+    predicted = selected_A @ reconstruction
+
+    final_residual = float(
+        np.linalg.norm(
+            predicted - selected_b
+        )
+    )
+
+    rmse = float(
+        np.sqrt(
+            np.mean(
+                (reconstruction - truth) ** 2
+            )
+        )
+    )
+
+    checks = {
+        "finite_reconstruction": bool(
+            np.isfinite(reconstruction).all()
+        ),
+        "nonnegative_reconstruction": bool(
+            (reconstruction >= 0).all()
+        ),
+        "finite_residuals": bool(
+            np.isfinite(
+                [initial_residual, final_residual, rmse]
+            ).all()
+        ),
+        "residual_improved": bool(
+            final_residual < initial_residual
+        ),
+    }
+
+    return {
+        "stage": "05A-04",
+        "size": size,
+        "angles": angles,
+        "tilts_deg": tilts,
+        "budget": budget,
+        "iterations": iterations,
+        "seed": seed,
+        "matrix_shape": list(
+            selected_A.shape
+        ),
+        "matrix_construction_seconds": matrix_seconds,
+        "selected_matrix_storage_mib": sparse_storage_mib(
+            selected_A
+        ),
+        "reconstruction_seconds": reconstruction_seconds,
+        "reconstruction_milliseconds": (
+            reconstruction_seconds * 1000
+        ),
+        "initial_residual": initial_residual,
+        "final_residual": final_residual,
+        "rmse": rmse,
+        "checks": checks,
+        "passed": all(checks.values()),
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description=(
+            "RBYRCT-05A: 3D projector and "
+            "reconstruction scaling feasibility benchmark."
+        )
+    )
+
+    parser.add_argument(
+        "--size",
+        type=int,
+        default=16,
+    )
+
+    parser.add_argument(
+        "--angles",
+        type=int,
+        default=12,
+    )
 
     parser.add_argument(
         "--tilts",
@@ -240,13 +462,40 @@ def main() -> None:
     parser.add_argument(
         "--include-fine",
         action="store_true",
-        help="Include fine-grid projector construction.",
+        help="Benchmark fine-grid projector construction.",
     )
 
     parser.add_argument(
         "--check-uniform",
         action="store_true",
-        help="Check coarse/fine agreement for a uniform volume.",
+        help="Compare coarse/fine uniform-volume projections.",
+    )
+
+    parser.add_argument(
+        "--include-sirt",
+        action="store_true",
+        help="Run reduced SIRT reconstruction benchmark.",
+    )
+
+    parser.add_argument(
+        "--sirt-budget",
+        type=int,
+        default=256,
+        help="Number of selected rays for SIRT.",
+    )
+
+    parser.add_argument(
+        "--sirt-iterations",
+        type=int,
+        default=40,
+        help="Number of SIRT iterations.",
+    )
+
+    parser.add_argument(
+        "--sirt-seed",
+        type=int,
+        default=271828,
+        help="Random seed for SIRT ray selection.",
     )
 
     parser.add_argument(
@@ -259,7 +508,7 @@ def main() -> None:
         "--min-free-ram",
         type=float,
         default=4.0,
-        help="Minimum free physical RAM in GiB for larger runs.",
+        help="Minimum available RAM in GiB for larger runs.",
     )
 
     parser.add_argument(
@@ -269,52 +518,114 @@ def main() -> None:
 
     args = parser.parse_args()
 
+    # --------------------------------------------------
     # Configuration validation
+    # --------------------------------------------------
+
     if args.size < 4:
-        parser.error("--size must be at least 4")
+        parser.error(
+            "--size must be at least 4"
+        )
 
     if args.angles < 2:
-        parser.error("--angles must be at least 2")
+        parser.error(
+            "--angles must be at least 2"
+        )
 
-    if not args.tilts or not all(math.isfinite(t) for t in args.tilts):
-        parser.error("--tilts must contain finite values")
+    if not args.tilts or not all(
+        math.isfinite(t) for t in args.tilts
+    ):
+        parser.error(
+            "--tilts must contain finite values"
+        )
 
     if args.factor < 2:
-        parser.error("--factor must be at least 2")
+        parser.error(
+            "--factor must be at least 2"
+        )
 
     if args.size > 32:
-        parser.error("05A currently supports grid sizes up to 32")
+        parser.error(
+            "05A currently supports grid sizes up to 32"
+        )
 
     if args.size > 16 and not args.allow_large:
-        parser.error("Use --allow-large for grid sizes above 16")
+        parser.error(
+            "Use --allow-large for grid sizes above 16"
+        )
 
-    if not math.isfinite(args.min_free_ram) or args.min_free_ram <= 0:
-        parser.error("--min-free-ram must be finite and positive")
+    if (
+        not math.isfinite(args.min_free_ram)
+        or args.min_free_ram <= 0
+    ):
+        parser.error(
+            "--min-free-ram must be finite and positive"
+        )
+
+    if args.sirt_budget < 1:
+        parser.error(
+            "--sirt-budget must be positive"
+        )
+
+    if args.sirt_iterations < 1:
+        parser.error(
+            "--sirt-iterations must be positive"
+        )
+
+    total_rays = (
+        len(args.tilts)
+        * args.angles
+        * args.size**2
+    )
+
+    if (
+        args.include_sirt
+        and args.sirt_budget > total_rays
+    ):
+        parser.error(
+            "--sirt-budget exceeds available rays"
+        )
+
+    if (
+        args.include_fine or args.check_uniform
+    ) and args.size * args.factor > 64:
+        parser.error(
+            "Fine-grid dimensions above 64 "
+            "are outside 05A scope"
+        )
+
+    # --------------------------------------------------
+    # Memory admission check
+    # --------------------------------------------------
+
+    try:
+        free_ram = available_ram_gib()
+    except OSError as exc:
+        if args.size > 16:
+            parser.error(str(exc))
+        free_ram = None
 
     if args.size > 16:
-        try:
-            free_ram = available_ram_gib()
-        except OSError as exc:
-            parser.error(str(exc))
+        if free_ram is None:
+            parser.error(
+                "Available RAM could not be determined"
+            )
 
         if free_ram < args.min_free_ram:
             parser.error(
                 f"Only {free_ram:.2f} GiB RAM available; "
                 f"{args.min_free_ram:.2f} GiB required."
             )
-    else:
-        try:
-            free_ram = available_ram_gib()
-        except OSError:
-            free_ram = None
 
-    # Safeguard against unusually large fine grids at a small coarse size.
-    if (args.include_fine or args.check_uniform) and args.size * args.factor > 64:
-        parser.error("Fine-grid dimensions above 64 are outside 05A scope")
+    # --------------------------------------------------
+    # Report metadata
+    # --------------------------------------------------
 
     report = {
         "experiment": "RBYRCT-05A",
-        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "timestamp_utc": datetime.now(
+            timezone.utc
+        ).isoformat(),
         "python": platform.python_version(),
         "numpy": np.__version__,
         "scipy": scipy.__version__,
@@ -325,15 +636,24 @@ def main() -> None:
             "factor": args.factor,
             "include_fine": args.include_fine,
             "check_uniform": args.check_uniform,
+            "include_sirt": args.include_sirt,
+            "sirt_budget": args.sirt_budget,
+            "sirt_iterations": args.sirt_iterations,
+            "sirt_seed": args.sirt_seed,
             "allow_large": args.allow_large,
             "min_free_ram_gib": args.min_free_ram,
         },
         "available_ram_before_gib": free_ram,
     }
 
-    print(f"RBYRCT-05A: {args.size}^3 coarse grid")
+    print(
+        f"RBYRCT-05A: {args.size}^3 coarse grid"
+    )
 
-    # Stage 05A-01
+    # --------------------------------------------------
+    # Stage 05A-01: coarse projector
+    # --------------------------------------------------
+
     report["coarse"] = benchmark_coarse(
         args.size,
         args.angles,
@@ -341,6 +661,7 @@ def main() -> None:
     )
 
     coarse = report["coarse"]
+
     print(
         f"Coarse: shape={coarse['matrix_shape']}, "
         f"nnz={coarse['nonzeros']}, "
@@ -348,7 +669,10 @@ def main() -> None:
         f"time={coarse['construction_seconds']:.2f} s"
     )
 
-    # Stage 05A-02
+    # --------------------------------------------------
+    # Stage 05A-02: fine projector
+    # --------------------------------------------------
+
     if args.include_fine:
         report["fine"] = benchmark_fine(
             args.size,
@@ -358,6 +682,7 @@ def main() -> None:
         )
 
         fine = report["fine"]
+
         print(
             f"Fine: shape={fine['matrix_shape']}, "
             f"nnz={fine['nonzeros']}, "
@@ -365,21 +690,57 @@ def main() -> None:
             f"time={fine['construction_seconds']:.2f} s"
         )
 
-    # Stage 05A-03
+    # --------------------------------------------------
+    # Stage 05A-03: uniform-volume consistency
+    # --------------------------------------------------
+
     if args.check_uniform:
-        report["uniform_agreement"] = benchmark_uniform_agreement(
-            args.size,
-            args.angles,
-            args.tilts,
-            factor=args.factor,
+        report["uniform_agreement"] = (
+            benchmark_uniform_agreement(
+                args.size,
+                args.angles,
+                args.tilts,
+                factor=args.factor,
+            )
         )
 
         uniform = report["uniform_agreement"]
+
         print(
             "Uniform agreement: "
-            f"max error={uniform['maximum_absolute_difference']}, "
+            f"max error="
+            f"{uniform['maximum_absolute_difference']}, "
             f"passed={uniform['passed']}"
         )
+
+    # --------------------------------------------------
+    # Stage 05A-04: reduced SIRT reconstruction
+    # --------------------------------------------------
+
+    if args.include_sirt:
+        report["sirt"] = benchmark_sirt(
+            size=args.size,
+            angles=args.angles,
+            tilts=args.tilts,
+            budget=args.sirt_budget,
+            iterations=args.sirt_iterations,
+            seed=args.sirt_seed,
+        )
+
+        sirt = report["sirt"]
+
+        print(
+            f"SIRT: rays={sirt['budget']}, "
+            f"iterations={sirt['iterations']}, "
+            f"time={sirt['reconstruction_milliseconds']:.3f} ms, "
+            f"RMSE={sirt['rmse']:.6f}, "
+            f"residual={sirt['final_residual']:.6f}, "
+            f"passed={sirt['passed']}"
+        )
+
+    # --------------------------------------------------
+    # Overall validation
+    # --------------------------------------------------
 
     stages = ["coarse"]
 
@@ -389,26 +750,53 @@ def main() -> None:
     if args.check_uniform:
         stages.append("uniform_agreement")
 
+    if args.include_sirt:
+        stages.append("sirt")
+
     report["numerical_checks_passed"] = all(
-        report[stage]["passed"] for stage in stages
+        report[stage]["passed"]
+        for stage in stages
     )
 
     report["limitations"] = [
         "Synthetic parallel-ray geometry only.",
         "No adaptive acquisition policy evaluated.",
-        "Uniform-volume agreement does not prove general operator equivalence.",
-        "CSR storage excludes temporary allocations and other process memory.",
-        "Available-RAM screening is not a guaranteed peak-memory bound.",
+        "SIRT uses a same-operator inverse-crime smoke test.",
+        "Uniform-volume agreement does not establish "
+        "general operator equivalence.",
+        "CSR storage excludes temporary allocations "
+        "and other process memory.",
+        "Available-RAM screening does not guarantee "
+        "a safe peak-memory bound.",
+        "Stages reconstruct matrices independently; "
+        "construction times are not end-to-end optimized.",
+        "Physical CT performance, radiation dose, and "
+        "clinical usefulness are not evaluated.",
     ]
 
+    # --------------------------------------------------
+    # Save reproducible JSON report
+    # --------------------------------------------------
+
     output = Path(args.output)
-    output.parent.mkdir(parents=True, exist_ok=True)
+    output.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
     output.write_text(
-        json.dumps(report, indent=2),
+        json.dumps(
+            report,
+            indent=2,
+            allow_nan=False,
+        ),
         encoding="utf-8",
     )
 
-    print(f"All numerical checks passed: {report['numerical_checks_passed']}")
+    print(
+        "All numerical checks passed: "
+        f"{report['numerical_checks_passed']}"
+    )
     print(f"Report: {output}")
 
     if not report["numerical_checks_passed"]:
