@@ -97,6 +97,7 @@ def main(argv=None):
     p.add_argument('--warm-rays',type=int,default=128);p.add_argument('--batch',type=int,default=64)
     p.add_argument('--provisional-epochs',type=int,default=3);p.add_argument('--diagnostic-epochs',type=int,default=3)
     p.add_argument('--mart-epochs',type=int,default=8);p.add_argument('--candidate-pool',type=int,default=64)
+    p.add_argument('--mart-relaxation',type=float,default=0.15,help='MART relaxation for provisional, diagnostic, and final reconstruction')
     p.add_argument('--threshold',type=float,default=2.0);p.add_argument('--gate-strength',type=float,default=0.)
     p.add_argument('--diagnostic-every',type=int,default=256);p.add_argument('--holdout-fraction',type=float,default=.2)
     p.add_argument('--step',type=float,default=0.25,help='ray marching integration step in coarse voxel units')
@@ -110,10 +111,11 @@ def main(argv=None):
     n_rays=a.size*a.size*a.angles*len(TILTS)
     if (not np.isfinite(a.step) or a.step<=0 or a.step>1 or a.size<4 or a.angles<2 or a.factor<2 or a.warm_rays<12 or a.batch<1 or a.candidate_pool<1
         or a.provisional_epochs<1 or a.diagnostic_epochs<1 or a.mart_epochs<1 or a.diagnostic_every<1
+        or not np.isfinite(a.mart_relaxation) or not 0<a.mart_relaxation<=1
         or a.threshold<=0 or not 0<a.holdout_fraction<.5 or not 0<=a.gate_strength<=1
         or not a.budgets or min(a.budgets)<=a.warm_rays or max(a.budgets)>n_rays or not a.seeds
         or not a.phantoms or not a.object_types or not a.offsets or min(a.offsets)<0
-        or not a.noise_fractions or min(a.noise_fractions)<0):p.error('invalid 05B-04P configuration')
+        or not a.noise_fractions or min(a.noise_fractions)<0):p.error('invalid 05B-04QB configuration')
     a.output_dir.mkdir(parents=True,exist_ok=True)
     A=system_matrix(a.size,a.angles,TILTS).tocsr()
     fine_ops={offset:high_resolution_matrix(a.size,a.angles,TILTS,a.factor,offset) for offset in sorted(set(a.offsets))}
@@ -144,16 +146,16 @@ def main(argv=None):
           for budget in sorted(set(a.budgets)):
            # MART 05B, frozen geometric baselines, frozen 04O-C gate.
            t=time.perf_counter()
-           adap,_,_=adaptive_order(A,obs,a.size,a.angles,warm[seed],budget,seed,a.warm_rays,a.batch,a.provisional_epochs,a.candidate_pool,1.)
+           adap,_,_=adaptive_order(A,obs,a.size,a.angles,warm[seed],budget,seed,a.warm_rays,a.batch,a.provisional_epochs,a.candidate_pool,1.,mart_relaxation=a.mart_relaxation)
            ada_s=time.perf_counter()-t
            t=time.perf_counter()
-           off,_,_=adaptive_order(A,obs,a.size,a.angles,warm[seed],budget,seed,a.warm_rays,a.batch,a.provisional_epochs,a.candidate_pool,0.)
+           off,_,_=adaptive_order(A,obs,a.size,a.angles,warm[seed],budget,seed,a.warm_rays,a.batch,a.provisional_epochs,a.candidate_pool,0.,mart_relaxation=a.mart_relaxation)
            off_s=time.perf_counter()-t
            gate,trace,gate_s=online_order(A,obs,a.size,a.angles,warm[seed],budget,seed,
               warm_rays=a.warm_rays,batch=a.batch,provisional_epochs=a.provisional_epochs,
               diagnostic_epochs=a.diagnostic_epochs,candidate_pool=a.candidate_pool,
               holdout_fraction=a.holdout_fraction,threshold=a.threshold,gate_strength=a.gate_strength,
-              diagnostic_every=a.diagnostic_every)
+              diagnostic_every=a.diagnostic_every,mart_relaxation=a.mart_relaxation)
            selections={'adaptive_feedback':adap,'feedback_off_control':off,
               'geometry_balanced':baseline[seed]['geometry_balanced'][:budget],
               'voxel_coverage_greedy':warm[seed][:budget],'reliability_gate':gate}
@@ -161,7 +163,7 @@ def main(argv=None):
            for decision in trace:gates.append(dict(**base_meta,**decision))
            for policy,ids in selections.items():
             if len(ids)!=budget or len(set(map(int,ids)))!=budget:raise AssertionError('invalid ray order')
-            start=time.perf_counter();x=mart_reconstruct(A[ids],obs[ids],a.mart_epochs);rec_s=time.perf_counter()-start
+            start=time.perf_counter();x=mart_reconstruct(A[ids],obs[ids],a.mart_epochs,relaxation=a.mart_relaxation);rec_s=time.perf_counter()-start
             rmse=float(np.sqrt(np.mean((x-truth)**2)))
             metrics.append(dict(**base_meta,policy=policy,rmse=rmse,relative_projection_mismatch=mismatch))
             sel_s={'adaptive_feedback':ada_s,'feedback_off_control':off_s,'reliability_gate':gate_s}.get(policy,float('nan'))
@@ -172,12 +174,12 @@ def main(argv=None):
                          ('gate_trace.csv',gates),('timing.csv',timings),('mismatch_diagnostics.csv',mismatches)]:
         rows_csv(a.output_dir/name,records)
     protocol={'experiment':'05B-04QB','design':'MART exploratory cross-projector rerun',
-      'mart_update':'04B per-ray multiplicative update, relaxation=0.15, positive initial=0.3',
+      'mart_update':f'04B per-ray multiplicative update, relaxation={a.mart_relaxation:g}, positive initial=0.3',
       'status':'unconfirmed exploratory MART rerun: not manuscript-ready',
       'parameters':{k:(str(v) if isinstance(v,Path) else v) for k,v in vars(a).items()},
       'measurement_generator':'04Q-A independent trilinear ray marching, midpoint integration',
       'reconstructor':'04B coarse Siddon-like operator with 05B MART',
-      'selectors':['05B MART feedback and feedback-off','04G geometry baseline frozen','04H coverage baseline frozen','05B MART gate with fixed threshold=2'],
+      'selectors':['05B MART feedback and feedback-off','04G geometry baseline frozen','04H coverage baseline frozen',f'05B MART gate with threshold={a.threshold:g}'],
       'limitations':['MART epoch settings require convergence-sensitivity analysis', 'Different numerical integration and interpolation, but not independent physical CT',
        'Fine Siddon projector used for offline diagnostics only','Seeds and offsets repeated within phantom family are not independent phantoms',
        'No physical detector/dose/clinical claims','No threshold optimization on these results',
