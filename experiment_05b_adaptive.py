@@ -36,7 +36,8 @@ def score_candidates(A,candidates,counts,viewcounts,n,features,coverage_alpha=0.
 
 def adaptive_order(A, observations, n, angles, warm_order, budget, seed,
                    warm_rays=128, batch=64, provisional_epochs=60,
-                   candidate_pool=64, feedback_strength=1.0):
+                   candidate_pool=64, feedback_strength=1.0,
+                   mart_relaxation=0.15):
     """Returns selected ray IDs and trace. Only observations[acquired IDs] accessed.
 
     observations is a synthetic measurement oracle. It is indexed only at
@@ -54,7 +55,12 @@ def adaptive_order(A, observations, n, angles, warm_order, budget, seed,
     while len(order)<budget:
         ids=np.asarray(order,dtype=np.int64)
         # Only previously acquired measurements influence this estimate.
-        x=mart_reconstruct(A[ids],observations[ids],provisional_epochs)
+        x = mart_reconstruct(
+            A[ids],
+            observations[ids],
+            provisional_epochs,
+            relaxation=mart_relaxation,
+        )
         features=image_score(x,n)
         target_count=min(batch,budget-len(order))
         for _ in range(target_count):

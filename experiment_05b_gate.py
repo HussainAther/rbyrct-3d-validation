@@ -25,7 +25,8 @@ class AcquiredOnly:
 def online_order(A,observed,n,angles,warm_order,budget,seed,*,policy='reliability_gate',
                  warm_rays=128,batch=64,provisional_epochs=60,candidate_pool=64,
                  diagnostic_epochs=60,holdout_fraction=.2,threshold=2.0,
-                 gate_strength=0.,constant_strength=.25,diagnostic_every=256):
+                 gate_strength=0.,constant_strength=.25,
+                 diagnostic_every=256,mart_relaxation=0.15):
     """Acquired-only prospective policy; returns order, audit, selection seconds.
 
     Same candidate sampling, score_candidates and prefix reconstruction as 04J.
@@ -47,14 +48,25 @@ def online_order(A,observed,n,angles,warm_order,budget,seed,*,policy='reliabilit
     while len(order)<budget:
         ids=np.asarray(order,dtype=np.int64)
         if policy=='reliability_gate' and (not audit or len(order)-last_check>=diagnostic_every):
-            sig=acquired_only_reliability(A,oracle,ids,n,diagnostic_epochs,holdout_fraction,seed+len(ids)*13)
+            sig = acquired_only_reliability(
+                A, oracle, ids, n,
+                diagnostic_epochs,
+                holdout_fraction,
+                seed + len(ids) * 13,
+                mart_relaxation=mart_relaxation,
+            )
             strength=gate_strength if sig['heldout_nrmse']>threshold else 1.
             last_check=len(order)
             audit.append(dict(acquired_before=len(order),**sig,threshold=threshold,feedback_strength_next=strength))
         elif policy=='adaptive_feedback':strength=1.
         elif policy=='feedback_off_control':strength=0.
         elif policy=='constant_feedback':strength=constant_strength
-        x=mart_reconstruct(A[ids],oracle[ids],provisional_epochs)
+        x = mart_reconstruct(
+            A[ids],
+            oracle[ids],
+            provisional_epochs,
+            relaxation=mart_relaxation,
+        )
         feat=image_score(x,n)
         count=min(batch,budget-len(order))
         for _ in range(count):
@@ -69,5 +81,3 @@ def online_order(A,observed,n,angles,warm_order,budget,seed,*,policy='reliabilit
             viewcounts[chosen//(n*n)]+=1
         oracle.commit(order[-count:])
     return np.asarray(order,dtype=np.int64),audit,time.perf_counter()-start
-
-
