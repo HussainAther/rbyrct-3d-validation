@@ -67,6 +67,8 @@ def main():
     ap.add_argument('--candidate-pool', type=int, default=64)
     ap.add_argument('--provisional-epochs', type=int, default=3)
     ap.add_argument('--mart-epochs', type=int, default=8)
+    ap.add_argument('--mart-relaxation', type=float, default=0.15,
+                    help='MART relaxation for provisional and checkpoint reconstructions')
     ap.add_argument('--output-dir', type=Path, default=Path('results/experiment05b_04r_pilot'))
     ap.add_argument('--allow-large', action='store_true', help='Explicit opt-in to larger grids with RAM check')
     args = ap.parse_args()
@@ -76,7 +78,10 @@ def main():
         ap.error(str(exc))
     if args.budget <= args.warm_rays or args.warm_rays < 12 or args.budget > args.size**2 * args.angles * len(TILTS):
         ap.error('Invalid budget/warm start for the requested geometry')
-    if args.batch <= 0 or args.candidate_pool <= 0 or args.mart_epochs <= 0 or args.provisional_epochs <= 0 or args.factor < 2 or args.offset < 0:
+    if (args.batch <= 0 or args.candidate_pool <= 0 or args.mart_epochs <= 0
+            or args.provisional_epochs <= 0 or args.factor < 2 or args.offset < 0
+            or not np.isfinite(args.mart_relaxation)
+            or not 0 < args.mart_relaxation <= 1):
         ap.error('Invalid numeric argument')
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
         ap.error(f'Output directory is not empty: {args.output_dir}; use a fresh directory')
@@ -99,7 +104,8 @@ def main():
             order, _, _ = adaptive_order(A, observed, args.size, args.angles, warm,
                                           args.budget, args.seed, args.warm_rays,
                                           args.batch, args.provisional_epochs,
-                                          args.candidate_pool, strength)
+                                           args.candidate_pool, strength,
+                                           mart_relaxation=args.mart_relaxation)
             order = np.asarray(order, dtype=np.int64)
             if len(order) != args.budget or len(np.unique(order)) != args.budget or np.any(order < 0) or np.any(order >= A.shape[0]):
                 raise AssertionError(f'Invalid ray order for {representation}/{policy}')
@@ -116,7 +122,8 @@ def main():
             for k in checkpoints:
                 ids = order[:k]
                 # Offline evaluation only: selector NEVER receives truth.
-                x = mart_reconstruct(A[ids], observed[ids], args.mart_epochs)
+                x = mart_reconstruct(A[ids], observed[ids], args.mart_epochs,
+                                     relaxation=args.mart_relaxation)
                 rmse = float(np.sqrt(np.mean((np.asarray(x).ravel() - np.asarray(truth).ravel())**2)))
                 checkpoint_rows.append(dict(phantom=args.phantom, representation=representation,
                                              offset=args.offset, seed=args.seed, budget=args.budget,
@@ -151,7 +158,7 @@ def main():
                     arguments={k: str(v) if isinstance(v, Path) else v for k,v in vars(args).items()},
                     checkpoints=checkpoints, python=sys.version, platform=platform.platform(),
                     numpy=np.__version__, scipy=scipy.__version__,
-                    limitations=['Exact frozen 04J adaptive selector, original 05B-04P observation model',
+                    limitations=['05B MART-adaptive selector, original 05B-04P observation model',
                                  'No randomized causal policy switching performed',
                                  'Prefix RMSE uses synthetic truth only for offline evaluation',
                                  'Selected-ray divergence is descriptive, not a causal explanation',

@@ -6,7 +6,7 @@ feedback strengths (1 and 0), using EXACTLY the 04J scoring and candidate RNG.
 Historical SIRT sources are preserved. Truth is used offline only.
 
 Example:
- python experiment_04s.py --source-dir results/experiment05b_04r_pilot \
+ python experiment_05b_04s.py --source-dir results/experiment05b_04r_pilot \
    --output-dir results/experiment05b_04s_pilot
 """
 from __future__ import annotations
@@ -63,7 +63,7 @@ def read_reference(path, phantom, representation, seed, budget):
     return out
 
 
-def continue_after_prefix(A, observed, n, angles, prefix, seed, budget, strength, warm_rays, batch, candidate_pool, provisional_epochs):
+def continue_after_prefix(A, observed, n, angles, prefix, seed, budget, strength, warm_rays, batch, candidate_pool, provisional_epochs, mart_relaxation=0.15):
     """05B MART-equivalent replay and continuation; candidate RNG advanced over prefix.
 
     A shared acquisition history is held fixed; RNG candidate draw calls are
@@ -95,7 +95,8 @@ def continue_after_prefix(A, observed, n, angles, prefix, seed, budget, strength
     while len(order) < budget:
         ids = np.asarray(order, dtype=np.int64)
         # Observations are indexed ONLY for previously acquired rays.
-        x = mart_reconstruct(A[ids], observed[ids], provisional_epochs)
+        x = mart_reconstruct(A[ids], observed[ids], provisional_epochs,
+                             relaxation=mart_relaxation)
         features = image_score(x, n)
         count = min(batch, budget-len(order))
         for _ in range(count):
@@ -129,6 +130,8 @@ def main():
     p.add_argument('--candidate-pool', type=int, default=64)
     p.add_argument('--provisional-epochs', type=int, default=3)
     p.add_argument('--mart-epochs', type=int, default=8)
+    p.add_argument('--mart-relaxation', type=float, default=0.15,
+                   help='MART relaxation; must match saved 04R source')
     p.add_argument('--allow-large', action='store_true', help='Explicit opt-in to larger grids with RAM check')
     a = p.parse_args()
     try:
@@ -141,7 +144,9 @@ def main():
         p.error('Invalid warm/switch/budget arrangement')
     if (a.switch_at-a.warm_rays) % a.batch:
         p.error('--switch-at must be a 04J batch boundary: warm + multiple of batch')
-    if min(a.size,a.angles,a.factor,a.batch,a.candidate_pool,a.provisional_epochs,a.mart_epochs) <= 0 or a.factor < 2 or a.offset < 0:
+    if (min(a.size,a.angles,a.factor,a.batch,a.candidate_pool,a.provisional_epochs,a.mart_epochs) <= 0
+            or a.factor < 2 or a.offset < 0
+            or not np.isfinite(a.mart_relaxation) or not 0 < a.mart_relaxation <= 1):
         p.error('Invalid geometry or iteration settings')
     source = a.source_dir/'selected_rays.csv'
     if not source.is_file():
@@ -151,9 +156,9 @@ def main():
         p.error(f'Missing 04R protocol: {proto_path}')
     source_proto = json.loads(proto_path.read_text(encoding='utf8'))['arguments']
     # Guard against silently matching 04R histories to a different geometry or protocol.
-    for k in ('phantom','size','angles','factor','offset','seed','budget','warm_rays','batch','candidate_pool','provisional_epochs','mart_epochs'):
+    for k in ('phantom','size','angles','factor','offset','seed','budget','warm_rays','batch','candidate_pool','provisional_epochs','mart_epochs','mart_relaxation'):
         orig, new = source_proto[k], getattr(a,k)
-        if k == 'offset':
+        if k in ('offset', 'mart_relaxation'):
             matches = float(orig) == float(new)
         elif isinstance(new,int):
             matches = int(orig) == new
@@ -179,10 +184,11 @@ def main():
             if not np.array_equal(reference[:a.warm_rays], warm[:a.warm_rays]):
                 raise AssertionError(f'Warm rays disagree: {representation}/{name}')
             strength = 1. if name == 'adaptive_feedback' else 0.
-            # Independent frozen-selector reproducibility test on this Mac.
+            # Independent MART-selector reproducibility test on the current machine.
             fresh, _, _ = adaptive_order(A, obs, a.size, a.angles, warm, a.budget,
                                           a.seed, a.warm_rays, a.batch,
-                                          a.provisional_epochs, a.candidate_pool, strength)
+                                          a.provisional_epochs, a.candidate_pool, strength,
+                                          mart_relaxation=a.mart_relaxation)
             if not np.array_equal(fresh, reference):
                 raise AssertionError(f'MART 05B does not reproduce saved 04R reference: {representation}/{name}')
 
@@ -193,7 +199,8 @@ def main():
                 arm = source_label+'__'+continuation_label
                 order = continue_after_prefix(A, obs, a.size, a.angles, prefix, a.seed,
                                               a.budget, strength, a.warm_rays, a.batch,
-                                              a.candidate_pool, a.provisional_epochs)
+                                               a.candidate_pool, a.provisional_epochs,
+                                               mart_relaxation=a.mart_relaxation)
                 assert np.array_equal(order[:a.switch_at], prefix)
                 if len(set(map(int,order)))!=a.budget:
                     raise AssertionError(f'Duplicate selection: {arm}')
@@ -210,7 +217,8 @@ def main():
                                                view_index=int(ray)//(a.size*a.size)))
                 for k in checkpoints:
                     ids=order[:k]
-                    x=mart_reconstruct(A[ids],obs[ids],a.mart_epochs)
+                    x=mart_reconstruct(A[ids],obs[ids],a.mart_epochs,
+                                       relaxation=a.mart_relaxation)
                     rmse=float(np.sqrt(np.mean((np.asarray(x).ravel()-np.asarray(truth).ravel())**2)))
                     checkpoint_rows.append(dict(representation=representation,arm=arm,
                                                 source_prefix=source_label,continuation=continuation_label,
@@ -241,7 +249,7 @@ def main():
         arguments={k:(str(v) if isinstance(v,Path) else v) for k,v in vars(a).items()},
         checkpoints=checkpoints,source_protocol=source_proto,
         same_policy_replay_verified=True,
-        rng_rule='Replay 04J random candidate draws against the recorded acquired prefix, then continue with preserved RNG stream; no future measurements used to choose rays.',
+        rng_rule='Replay 05B candidate draws against the recorded acquired prefix, then continue with preserved RNG stream; no future measurements used to choose rays.',
         inference='Within-simulation controlled continuation-policy contrast; exploratory single seed/family; not population-level or clinical causality.',
         offline_ground_truth='Only reconstruction RMSE evaluation after selection, never online selector.',
         python=sys.version,platform=platform.platform(),numpy=np.__version__,scipy=scipy.__version__)
