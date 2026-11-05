@@ -15,6 +15,7 @@ from pathlib import Path
 
 import numpy as np
 from scipy.sparse import csr_matrix
+from experiment_08w import detector_entropy
 
 from experiment_08u import (append_cholesky, score_full_from_cholesky,
     select_full, geometry, order_sha256, write_csv,
