@@ -336,4 +336,3 @@ def main():
         run(args.output_dir,args.preflight_dir)
 
 if __name__=='__main__': main()
-
