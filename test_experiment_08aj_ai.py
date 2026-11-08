@@ -41,12 +41,12 @@ def test_wall_is_immutable(tmp_path,monkeypatch):
 
 def test_orphan_staging_preserved(tmp_path,monkeypatch):
     root=fixture(tmp_path,monkeypatch)
-    r=ai.exercise(root,'atomic-stage',1.0)
+    r=ai.exercise(root,'atomic-stage',3.0)
     assert r['verdict']=='WALL_TIMEOUT_WORKER_TERMINATED'
     assert len(list((root/'cases'/'atomic-stage'/'sandbox').iterdir()))==1
 
 def test_orphan_quarantine(tmp_path,monkeypatch):
-    root=fixture(tmp_path,monkeypatch);ai.exercise(root,'atomic-stage',1.0)
+    root=fixture(tmp_path,monkeypatch);ai.exercise(root,'atomic-stage',3.0)
     assert ai.quarantine(root)['quarantined_stages']==1
     with pytest.raises((FileExistsError,ValueError)):ai.quarantine(root)
     assert audit.audit(root,None,None,None,None)['pass']
@@ -84,7 +84,7 @@ def test_audit_requires_all(tmp_path,monkeypatch):
 def test_full_independent_fault_audit(tmp_path,monkeypatch):
     root=fixture(tmp_path,monkeypatch)
     ai.exercise(root,'wall',0.5)
-    ai.exercise(root,'atomic-stage',1.0)
+    ai.exercise(root,'atomic-stage',3.0)
     ai.exercise(root,'memory',10)
     ai.quarantine(root)
     result=audit.audit(root,None,None,None,None,require_all=True)
@@ -95,7 +95,7 @@ def test_full_independent_fault_audit(tmp_path,monkeypatch):
 
 def test_quarantine_tampering_detected(tmp_path,monkeypatch):
     root=fixture(tmp_path,monkeypatch)
-    ai.exercise(root,'atomic-stage',1.0)
+    ai.exercise(root,'atomic-stage',3.0)
     ai.quarantine(root)
     (root/'cases'/'atomic-stage'/'quarantine'/'partial.bin').write_bytes(b'tampered')
     result=audit.audit(root,None,None,None,None)
