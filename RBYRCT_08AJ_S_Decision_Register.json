@@ -1,0 +1,39 @@
+{
+  "stage": "08AJ-S",
+  "version": "S1",
+  "date": "2026-11-06",
+  "verdict": "REVIEW_DRAFT_PENDING_SIGNOFF",
+  "frozen": false,
+  "confirmatory_execution_allowed": false,
+  "engineering_08aj_r_windows_audit": "PASS",
+  "audited_engineering_jobs": 10,
+  "prospective_jobs_planned": 480,
+  "completed_prospective_jobs": 0,
+  "decision_ids": [
+    "S-01",
+    "S-02",
+    "S-03",
+    "S-04",
+    "S-05",
+    "S-06",
+    "S-07",
+    "S-08",
+    "S-09"
+  ],
+  "unresolved_gates": [
+    "structural phantom comparison and limitations",
+    "bootstrap/precision rationale and practical threshold signoff",
+    "resource and failure policy signoff",
+    "480-job production runner and independent outcome audit",
+    "source commit/tag and explicit scientific approval"
+  ],
+  "source_scope": [
+    "08AJ_PROTOCOL_DESIGN.md",
+    "experiment_08aj_d.py",
+    "experiment_08aj_d_analysis.py",
+    "experiment_08aj_g.py",
+    "README_08AJ_F.md",
+    "README_08AJ_H.md",
+    "README_08AJ_R.md"
+  ]
+}
