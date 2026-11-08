@@ -275,4 +275,3 @@ def test_two_fresh_engineering_regenerations_agree(fx):
         assert abs(r1["rmse"] - r2["rmse"]) <= 1e-12
         assert r1["production_execution_allowed"] is False
         assert r2["production_execution_allowed"] is False
-
