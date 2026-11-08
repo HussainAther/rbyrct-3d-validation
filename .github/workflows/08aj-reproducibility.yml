@@ -1,0 +1,43 @@
+name: RBYRCT 08AJ Reproducibility
+
+on:
+  push:
+    branches:
+      - feat/08aj-engineering-validation
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  engineering-tests:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          miniforge-version: latest
+          activate-environment: rbyrct-08aj-repro
+          environment-file: environment_08aj.yml
+          auto-activate-base: false
+
+      - name: Verify Python environment
+        shell: pwsh
+        run: |
+          conda run -n rbyrct-08aj-repro python --version
+          conda run -n rbyrct-08aj-repro python -m pip check
+
+      - name: Run published 08AJ tests
+        shell: pwsh
+        run: |
+          $tests = @(git ls-files -- 'test_experiment_08aj_*.py')
+          if ($tests.Count -ne 40) {
+            throw "Expected 40 published 08AJ test modules; found $($tests.Count)"
+          }
+          conda run --no-capture-output -n rbyrct-08aj-repro python -m pytest @tests -q
+          if ($LASTEXITCODE -ne 0) {
+            throw "08AJ engineering tests failed"
+          }
