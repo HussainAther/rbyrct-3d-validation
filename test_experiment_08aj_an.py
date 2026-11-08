@@ -275,3 +275,165 @@ def test_two_fresh_engineering_regenerations_agree(fx):
         assert abs(r1["rmse"] - r2["rmse"]) <= 1e-12
         assert r1["production_execution_allowed"] is False
         assert r2["production_execution_allowed"] is False
+
+
+def test_real_numerical_8cubed_smoke(tmp_path):
+    """Real numerical CLI smoke test; no stubbed geometry or MART.
+
+    Creates a fresh locked M/AA contract and runs one fixed
+    noncohort AN engineering reconstruction. No prospective
+    execution or scientific certification is permitted.
+    """
+    import json
+    import subprocess
+    import sys
+
+    project = Path(__file__).resolve().parent
+
+    m_dir = tmp_path / "m"
+    aa_dir = tmp_path / "aa"
+    an_dir = tmp_path / "an_real"
+
+    def invoke(script, *arguments):
+        command = [
+            sys.executable,
+            str(project / script),
+            *[str(value) for value in arguments],
+        ]
+
+        result = subprocess.run(
+            command,
+            cwd=project,
+            capture_output=True,
+            text=True,
+            timeout=240,
+        )
+
+        assert result.returncode == 0, (
+            f"Command failed: {command}\n"
+            f"stdout: {result.stdout}\n"
+            f"stderr: {result.stderr}"
+        )
+
+        return json.loads(result.stdout)
+
+    m = invoke(
+        "experiment_08aj_m.py",
+        "--mode", "prepare",
+        "--output-dir", m_dir,
+    )
+    assert m["verdict"] == "M_CONTRACT_PREPARED"
+    assert m["execution_allowed"] is False
+
+    aa = invoke(
+        "experiment_08aj_aa.py",
+        "--mode", "prepare",
+        "--output-dir", aa_dir,
+        "--m-dir", m_dir,
+    )
+    assert aa["verdict"] == "AA_DISABLED_PRODUCTION_PATH_PREPARED"
+    assert aa["confirmatory_execution_allowed"] is False
+
+    shared = [
+        "--output-dir", an_dir,
+        "--aa-dir", aa_dir,
+        "--m-dir", m_dir,
+    ]
+
+    plan = invoke(
+        "experiment_08aj_an.py",
+        "--mode", "init",
+        *shared,
+        "--n", 8,
+    )
+    assert plan["verdict"] == "AN_ENGINEERING_OBJECTS_PREPARED"
+    assert plan["production_execution_allowed"] is False
+
+    condition = [
+        "--object", "engineering_alpha",
+        "--acquisition", "seed_a",
+        "--model", "same",
+    ]
+
+    catalogue = invoke(
+        "experiment_08aj_an.py",
+        "--mode", "catalogue",
+        *shared,
+        *condition,
+    )
+    assert catalogue["verdict"] == "AN_SHARED_GROUP_PREPARED"
+
+    job_arguments = [
+        *condition,
+        "--policy", "information_diag",
+    ]
+
+    dispatched = invoke(
+        "experiment_08aj_an.py",
+        "--mode", "dispatch",
+        *shared,
+        *job_arguments,
+    )
+    assert dispatched["verdict"] == "AN_JOB_DISPATCHED"
+    assert dispatched["production_execution_allowed"] is False
+
+    completed = invoke(
+        "experiment_08aj_an.py",
+        "--mode", "run",
+        *shared,
+        *job_arguments,
+        "--wall-seconds", 180,
+        "--max-mib", 8192,
+    )
+    assert completed["verdict"] == "AN_ENGINEERING_JOB_PASS"
+    assert completed["rows_done"] == 256
+    assert completed["production_execution_allowed"] is False
+
+    report = invoke(
+        "experiment_08aj_an_audit.py",
+        *shared,
+    )
+
+    assert report["verdict"] == "AN_INDEPENDENT_MULTI_SEED_AUDIT_PASS"
+    assert report["pass"] is True
+    assert report["errors"] == []
+    assert report["engineering_jobs_audited"] == 1
+    assert report["shared_groups_audited"] == 1
+    assert report["production_jobs_executed"] == 0
+    assert report["production_execution_allowed"] is False
+    assert report["production_480_job_certified"] is False
+
+    detail = report["details"][0]
+    assert detail["pass"] is True
+    assert detail["errors"] == []
+    assert detail["job_id"] == (
+        "engineering_alpha__seed_a__same__information_diag"
+    )
+    assert 0 <= detail["max_abs_replay_error"] <= 1e-11
+    assert 0 <= detail["abs_rmse_difference"] <= 1e-12
+
+    import numpy as np
+
+    job_dir = an_dir / "jobs" / detail["job_id"]
+
+    reconstruction = np.load(
+        job_dir / "final" / "reconstruction.npy",
+        allow_pickle=False,
+    )
+
+    assert reconstruction.shape == (512,)
+    assert np.isfinite(reconstruction).all()
+    assert np.all(reconstruction > 0)
+
+    contract = json.loads(
+        (m_dir / "production_contract_draft.json").read_text()
+    )
+    manifest = json.loads(
+        (aa_dir / "aa_manifest.json").read_text()
+    )
+
+    assert contract["execution_gate"]["enabled"] is False
+    assert contract["frozen"] is False
+    assert manifest["scientific_signoff"] is False
+    assert manifest["resource_policy_approved"] is False
+    assert manifest["confirmatory_execution_allowed"] is False
