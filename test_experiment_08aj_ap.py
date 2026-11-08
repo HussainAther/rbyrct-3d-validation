@@ -84,3 +84,46 @@ def test_report_structure_rejects_unlock(setup,tmp_path):
 def test_reject_aa_link_drift(setup):
     p=setup[1]/'plan.json';r=ap.load(p);r['aa_spec_sha256']='f'*64;save(p,r)
     with pytest.raises(ValueError):ap.inspect(*setup)
+
+
+def test_accept_machine_precision_replay(setup):
+    for path in (setup[3], setup[4]):
+        report = ap.load(path)
+        report['details'][0]['max_abs_replay_error'] = 1.8e-15
+        report['details'][0]['abs_rmse_difference'] = 1e-14
+        save(path, report)
+    result = ap.inspect(*setup)
+    assert result['gates_blocked'] == 5
+    assert result['production_execution_allowed'] is False
+
+
+@pytest.mark.parametrize('bad', [
+    None, True, -1e-15, 1e-5
+])
+def test_reject_invalid_numerical_replay(setup, bad):
+    path = setup[4]
+    report = ap.load(path)
+    report['details'][0]['max_abs_replay_error'] = bad
+    save(path, report)
+    with pytest.raises(ValueError):
+        ap.inspect(*setup)
+
+
+@pytest.mark.parametrize('bad', [
+    None, False, -1e-15, 1e-6
+])
+def test_reject_invalid_rmse_difference(setup, bad):
+    path = setup[4]
+    report = ap.load(path)
+    report['details'][0]['abs_rmse_difference'] = bad
+    save(path, report)
+    with pytest.raises(ValueError):
+        ap.inspect(*setup)
+
+
+@pytest.mark.parametrize('bad', [
+    float('nan'), float('inf'), float('-inf')
+])
+@pytest.mark.parametrize('tolerance', [1e-11, 1e-12])
+def test_reject_nonfinite_numerical_difference(bad, tolerance):
+    assert ap.valid_numerical_difference(bad, tolerance) is False

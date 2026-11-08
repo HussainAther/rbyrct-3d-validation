@@ -4,7 +4,7 @@ No prospective execution, no scientific approvals, no source freeze.
 Input audit outputs are *reported* independent audits, not replayed by AP.
 """
 from __future__ import annotations
-import argparse, hashlib, json, os
+import argparse, hashlib, json, math, os
 from pathlib import Path
 
 SCHEMA='RBYRCT-08AJ-AP-read-only-qualification-v1'
@@ -32,6 +32,13 @@ def load(path):
 
 def require(condition,message):
     if not condition:raise ValueError(message)
+
+def valid_numerical_difference(value, tolerance):
+    return (
+        type(value) in (int, float)
+        and math.isfinite(value)
+        and 0.0 <= value <= tolerance
+    )
 
 def inspect(aa_dir, an8_dir, ao_dir, an8_audit, ao_audit, y_dir=None):
     aa_dir=Path(aa_dir); an8_dir=Path(an8_dir); ao_dir=Path(ao_dir)
@@ -82,7 +89,7 @@ def inspect(aa_dir, an8_dir, ao_dir, an8_audit, ao_audit, y_dir=None):
         details=audit.get('details',[])
         require(len(details)==expected_jobs and len({d.get('job_id') for d in details})==expected_jobs,'reported audit job uniqueness mismatch: '+name)
         for d in details:
-            require(d.get('pass') is True and d.get('errors')==[] and d.get('max_abs_replay_error')==0.0 and d.get('abs_rmse_difference')==0.0,'reported numerical discrepancy: '+name)
+            require(d.get('pass') is True and d.get('errors')==[] and valid_numerical_difference(d.get('max_abs_replay_error'),1e-11) and valid_numerical_difference(d.get('abs_rmse_difference'),1e-12),'reported numerical discrepancy: '+name)
             require((root/'jobs'/d['job_id']/'final'/'receipt.json').is_file(),'missing final engineering receipt: '+name+'/'+d['job_id'])
             receipt=load(root/'jobs'/d['job_id']/'final'/'receipt.json')
             require(receipt.get('job_id')==d['job_id'] and receipt.get('production_execution_allowed') is False and receipt.get('no_confirmatory_outcomes') is True,'final receipt/lock mismatch: '+name+'/'+d['job_id'])
