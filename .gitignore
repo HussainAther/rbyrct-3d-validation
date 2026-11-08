@@ -7,5 +7,4 @@ RBYRCT_3D_*.pdf
 Figure*.png
 figures/
 rerun/
-*.docx
-*.pdf
+.pytest_cache/

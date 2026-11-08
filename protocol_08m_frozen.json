@@ -1,0 +1,92 @@
+{
+  "acquisition_seeds": [
+    820411,
+    820829
+  ],
+  "angles": 4,
+  "configs": {
+    "32": {
+      "batch": 32,
+      "budget": 4096,
+      "checkpoints": [
+        1024,
+        2048,
+        4096
+      ],
+      "epochs": 2,
+      "final_epochs": 16,
+      "pool": 16,
+      "warm": 64
+    }
+  },
+  "factor": 2,
+  "interpretation": "Geometry-only information policy, NOT measurement-adaptive; no clinical or dose claims",
+  "lambda_incremental": 0.25,
+  "models": [
+    "same",
+    "independent"
+  ],
+  "noise_fraction": 0.005,
+  "objects": [
+    820101,
+    828020,
+    835939,
+    843858,
+    851777,
+    859696,
+    867615,
+    875534
+  ],
+  "observation_variance": 1.0,
+  "offset": 0.15,
+  "policies": [
+    "coverage",
+    "gradient",
+    "incremental_25",
+    "information_diag"
+  ],
+  "primary": {
+    "budget": 2048,
+    "descriptive_wins": "number of objects with positive model/seed-averaged gain",
+    "endpoint": "object-balanced mean paired fractional whole-volume RMSE gain",
+    "inference": "report descriptive object mean, individual gains, optional bootstrap CI; no post-hoc threshold",
+    "policy": "information_diag",
+    "reference": "coverage",
+    "unit": "independent phantom; first average two models x two acquisition seeds"
+  },
+  "prior_variance": 1.0,
+  "relaxation": 0.25,
+  "run_rule": "single complete execution after protocol lock committed; no outcome-driven retuning",
+  "schema": "RBYRCT-08M-LOCK-v1",
+  "secondary": [
+    "defect-region RMSE gain at 2048 rays",
+    "whole-volume and defect gains at 1024 and 4096 rays",
+    "results stratified by model and acquisition seed",
+    "ray-order distinctness and seed dependence"
+  ],
+  "size": 32,
+  "source_hashes": {
+    "experiment_04b": "0fe9aa4d6214895af32d021f2d2a660902e7e0117989bf4b3114f33c02b6cde4",
+    "experiment_04g": "a796cdbe45550550dcc1bae8b81b9c07a0fdc49e36bf943a8ba9a1f808585c07",
+    "experiment_04h": "8c1b55a409c2f7bf500a4dd73ebb56c70d48e12408a0d003913edf9651601e6f",
+    "experiment_04qa": "d232562f2b5d62cffae746c400e9b563eca1b24d637abab59d26f503c12c4554",
+    "experiment_05b_04": "bdc7d2c75332457db314a3da971ad472717e0662fb29e7234ff706f64098e974",
+    "experiment_05b_08b": "99e6cc4daefceca82652ad81c207b918ec4474c2c1e22901c28c9bcfe9219675",
+    "experiment_05b_gate": "b68fed88cc7fcf5af44ed1a4b0da33873aebdb5bb64a3d79ec2a59ca6d5768d9",
+    "experiment_05b_mart": "aac99068ffdf6da2882608e9929d7879b88b98b4b99d41a5f66184b7fd20c529",
+    "experiment_06b": "8cee327297c0cc53d667fdf865bd79f2a280f5fffc62973e990562c1a7b9557b",
+    "experiment_07c_preflight": "f87cc240f4ad6fedda608f83cecff348f40ea62dee3d1d1cf49d3d9f8ae09969",
+    "experiment_08a": "d3c917e1d43b03c0aedd6a7e82aec7dc369dd40a630ededf2075592b5e185b4f",
+    "experiment_08b": "80c42fd6893bdbd45b60efdc0a4e32676e50dde4bf0c221978260ab07519d8d7",
+    "experiment_08j": "3a8c694f7bc25073892573173f15e10dc52825201918e9a030fc4b63f928ae9a",
+    "experiment_08k": "d205a8ae545a7335a1013a8cf834d98b7a35331aa0984681bff97515714c03dd",
+    "experiment_08m": "aeba9abf164b2f99ee89218e18a22f586d07f301653ad498ff736ebca73098d4"
+  },
+  "stage": "08M independent confirmatory synthetic validation",
+  "step": 0.25,
+  "tilts": [
+    -20.0,
+    0.0,
+    20.0
+  ]
+}

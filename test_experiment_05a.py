@@ -63,3 +63,21 @@ def test_uniform_coarse_fine_agreement():
     assert np.allclose(
         coarse_y, fine_y, rtol=1e-10, atol=1e-10
     )
+
+
+def test_small_sirt_benchmark():
+    from experiment_05a import benchmark_sirt
+
+    result = benchmark_sirt(
+        size=4,
+        angles=2,
+        tilts=[0.0],
+        budget=16,
+        iterations=20,
+        seed=271828,
+    )
+
+    assert result["passed"]
+    assert result["matrix_shape"] == [16, 64]
+    assert result["reconstruction_milliseconds"] >= 0
+    assert result["final_residual"] < result["initial_residual"]

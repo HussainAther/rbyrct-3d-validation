@@ -1,0 +1,11 @@
+work,year,selection_unit,criterion,measurement_adaptive,dimension_evidence,reconstructor_or_framework,comparison_to_RBYRCT,doi_or_url
+RBYRCT 08M 08Q,2026,individual candidate ray,diagonal trace-reduction surrogate,no,3D synthetic 32^3,MART,study under audit,internal frozen archive
+Burger et al sequentially optimized projections,2021,angle and source-receiver position,Bayesian A and D optimality,can adapt priors to measurements,2D simulated,Bayesian linear Gaussian,closest direct OED precedent,10.1088/1361-6420/ac01a4
+Helin et al edge-promoting OED,2022,projection geometry,A and D optimality approximate edge-aware Gaussian,yes via approximate posterior,2D and 3D simulated,TV-inspired lagged diffusivity,3D Bayesian OED precedent,10.1137/21M1409330
+Wang Lucka van Leeuwen sequential RL,2024,projection angle,learned sequential OED,yes,2D simulated,deep RL POMDP,IEEE TCI direct venue comparator,10.1109/TCI.2024.3414273
+Adaptive projection selection CT,2013,projection angle,spectral richness or added-information signal,yes,phantom and real image simulation,iterative CT,information-based CT acquisition precedent,10.1109/TIP.2013.2280185
+Barkan et al adaptive compressed tomography,2013,selected lines/rays,ridgelet-informed adaptive selection,yes,CT experiments,compressed tomography,ray selection precedent,https://openaccess.thecvf.com/content_cvpr_2013/html/Barkan_Adaptive_Compressed_Tomography_2013_CVPR_paper.html
+Task adaptive angle selection for defect detection,2024,projection angle,task reward and learned policy,yes,CT defect-task simulation,sequential OED RL,task-specific CT defect precedent,https://pmc.ncbi.nlm.nih.gov/articles/PMC11433431/
+Projection view error equidistribution,2025,projection view,projection error equidistribution,yes,simulation and real data,CT iterative imaging,practical simple selector precedent,10.1177/08953996241289267
+Wang et al angle dose RL,2026,angle and dose,learned dose-aware utility,yes,synthetic CT,Rl plus PWLS PnP,do not infer dose from rays,https://arxiv.org/abs/2604.20939
+Karimi McGuire view optimization,2026,projection view,matrix decomposition plus expected object gradient,conditionally object aware,5 and 15 view synthetic,statistical reconstruction,very recent preprint context,https://arxiv.org/abs/2611.03322

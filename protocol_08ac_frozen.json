@@ -1,0 +1,70 @@
+{
+  "acquisition_seeds": [
+    920411,
+    920829
+  ],
+  "angles": 4,
+  "batch": 32,
+  "budget": 1024,
+  "checkpoints": [
+    512,
+    1024
+  ],
+  "classification": "new synthetic 32-cubed prospectively locked study",
+  "conditions": "average matched/independent models and two acquisition seeds WITHIN object",
+  "epochs": 16,
+  "factor": 2,
+  "models": [
+    "same",
+    "independent"
+  ],
+  "noise_fraction": 0.005,
+  "object_seeds": [
+    920201,
+    920202,
+    920203,
+    920204,
+    920205,
+    920206
+  ],
+  "offset": 0.15,
+  "policies": [
+    "coverage",
+    "information_diag",
+    "information_full",
+    "full_spatial_balanced"
+  ],
+  "pool": 16,
+  "primary_checkpoint": 1024,
+  "primary_metric": "mean over 6 independent objects of paired whole-volume fractional RMSE gain",
+  "primary_policy": "full_spatial_balanced",
+  "primary_reference": "information_full",
+  "relaxation": 0.25,
+  "rules": [
+    "Never tune alpha or change selector after outcomes",
+    "Report all endpoints, including negative results and object-level wins",
+    "No clinical or radiation-dose conclusions",
+    "Do not modify the frozen 08M protocol or archive"
+  ],
+  "schema": "RBYRCT-08AC-PROTOCOL-v1",
+  "score_normalization": "independent per-pool min-max",
+  "size": 32,
+  "source_sha256": {
+    "experiment_04b": "0fe9aa4d6214895af32d021f2d2a660902e7e0117989bf4b3114f33c02b6cde4",
+    "experiment_04g": "a796cdbe45550550dcc1bae8b81b9c07a0fdc49e36bf943a8ba9a1f808585c07",
+    "experiment_04h": "8c1b55a409c2f7bf500a4dd73ebb56c70d48e12408a0d003913edf9651601e6f",
+    "experiment_04qa": "d232562f2b5d62cffae746c400e9b563eca1b24d637abab59d26f503c12c4554",
+    "experiment_05b_08b": "99e6cc4daefceca82652ad81c207b918ec4474c2c1e22901c28c9bcfe9219675",
+    "experiment_05b_mart": "aac99068ffdf6da2882608e9929d7879b88b98b4b99d41a5f66184b7fd20c529",
+    "experiment_06b": "8cee327297c0cc53d667fdf865bd79f2a280f5fffc62973e990562c1a7b9557b",
+    "experiment_07c_preflight": "f87cc240f4ad6fedda608f83cecff348f40ea62dee3d1d1cf49d3d9f8ae09969",
+    "experiment_08ac": "27e0eee0722c531af4990cc4c3766cb7088c1acc224b55f3a49d95e4ad1d599c",
+    "experiment_08k": "d205a8ae545a7335a1013a8cf834d98b7a35331aa0984681bff97515714c03dd",
+    "experiment_08u": "0db1be1cb069d431de4d48b6bab44126b053aef512fa446a4959be8239eff62c",
+    "experiment_08z": "5ce2c9a456acc8296bdcef8b0e9cdf6e74ab54da1bdfb14981793ba1295314da"
+  },
+  "spatial_alpha": 0.25,
+  "spatial_definition": "08Z negative ray-path-weighted cumulative absolute voxel sensitivity",
+  "step": 0.25,
+  "warm": 64
+}
