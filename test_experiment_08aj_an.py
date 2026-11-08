@@ -196,3 +196,83 @@ def test_cli_rejects_production_modes(monkeypatch,fx,capsys):
         with pytest.raises(SystemExit) as exc:runpy.run_module('experiment_08aj_an',run_name='__main__')
         assert exc.value.code==2
     assert 'PROSPECTIVE_EXECUTION_DISABLED' in capsys.readouterr().err
+
+
+def test_two_fresh_engineering_regenerations_agree(fx):
+    """Stubbed 8-cubed engineering reproducibility regression.
+
+    Both runs generate their own plans, catalogues, acquisition
+    orders, reconstruction checkpoints, and final evidence.
+    This is not real-physics or prospective certification.
+    """
+    object_name = "engineering_alpha"
+    acquisition = "seed_a"
+    model = "same"
+    policies = ("complete_view", "information_diag")
+
+    roots = (fx, fx.parent / "an_repeat")
+
+    for root in roots:
+        result = an.init(root, None, None, 8)
+        assert result["production_execution_allowed"] is False
+
+        result = an.catalogue(
+            root, None, None,
+            object_name, acquisition, model,
+        )
+        assert result["verdict"] == "AN_SHARED_GROUP_PREPARED"
+
+        for policy in policies:
+            dispatched = an.prepare_job(
+                root, None, None,
+                object_name, acquisition, model, policy,
+            )
+            assert dispatched["verdict"] == "AN_JOB_DISPATCHED"
+
+            finished = an.worker(
+                root, None, None,
+                object_name, acquisition, model, policy,
+            )
+            assert finished["verdict"] == "AN_ENGINEERING_JOB_PASS"
+            assert finished["production_execution_allowed"] is False
+
+        report = audit.audit(root, None, None)
+        assert report["pass"], report["errors"]
+        assert report["engineering_jobs_audited"] == 2
+        assert report["shared_groups_audited"] == 1
+        assert report["production_jobs_executed"] == 0
+        assert report["production_execution_allowed"] is False
+
+    group = an.group_name(object_name, acquisition, model)
+
+    for filename in ("clean.npy", "noisy.npy"):
+        original = roots[0] / "groups" / group / filename
+        repeated = roots[1] / "groups" / group / filename
+        assert original.read_bytes() == repeated.read_bytes()
+
+    for policy in policies:
+        job = an.job_name(object_name, acquisition, model, policy)
+
+        first = roots[0] / "jobs" / job
+        second = roots[1] / "jobs" / job
+
+        assert (
+            first / "order.npy"
+        ).read_bytes() == (
+            second / "order.npy"
+        ).read_bytes()
+
+        a = np.load(first / "final/reconstruction.npy", allow_pickle=False)
+        b = np.load(second / "final/reconstruction.npy", allow_pickle=False)
+
+        assert a.shape == b.shape
+        assert np.isfinite(a).all() and np.isfinite(b).all()
+        assert float(np.max(np.abs(a - b))) <= 1e-11
+
+        r1 = an.read(first / "final/receipt.json")
+        r2 = an.read(second / "final/receipt.json")
+
+        assert abs(r1["rmse"] - r2["rmse"]) <= 1e-12
+        assert r1["production_execution_allowed"] is False
+        assert r2["production_execution_allowed"] is False
+
