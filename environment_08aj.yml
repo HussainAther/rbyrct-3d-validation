@@ -1,4 +1,4 @@
-﻿name: rbyrct-08aj-repro
+name: rbyrct-08aj-repro
 channels:
   - conda-forge
 dependencies:
